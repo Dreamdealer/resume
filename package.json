@@ -1,6 +1,6 @@
 {
     "name": "Johans-Resume-Website",
-    "homepage": "https://github.com/Dreamdealer/resume/",
+    "homepage": ".",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
