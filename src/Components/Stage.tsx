@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { tetrisConfig } from '../tetrisConfig';
+import { TETROMINOS, TetrominosType } from '../tetrominos';
 import Cell from './Cell';
 
 const StyledStage = styled.div`
@@ -34,11 +35,10 @@ type PropsType = {
 const Stage:FC<PropsType> = props => {
     return (
         <StyledStage>
-            {props.stage.map((row: Array<Array<any>>) => (
-                <StyledRow>
-                    {row.map(([ type, state]) => {
-                        console.log(type, state)
-                        return <Cell color={type === 0 ? "transparent": "#db7093"} />
+            {props.stage.map((row: Array<Array<any>>, rowIndex: number) => (
+                <StyledRow key={rowIndex}>
+                    {row.map(([type, state], index: number) => {
+                        return <Cell key={rowIndex + index} color={type === 0 ? "transparent": TETROMINOS[type as keyof TetrominosType].color} />
                     })}
                 </StyledRow>
             ))}

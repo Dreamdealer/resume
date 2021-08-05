@@ -22,9 +22,6 @@ const StyledHeader = styled.div`
 const App:FC = () => {
   return (
     <StyledApp>
-      <StyledHeader>
-        <h1>Hello World</h1>
-      </StyledHeader>
       <Tetris />
     </StyledApp>
   );

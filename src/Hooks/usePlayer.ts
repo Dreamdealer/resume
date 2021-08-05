@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
+import { checkCollision, StageType } from '../gameHelpers';
 import { tetrisConfig } from '../tetrisConfig';
-import { randomTetromino, TetrominoShapeType } from '../tetrominos';
+import { randomTetromino, TETROMINOS, TetrominoShapeType } from '../tetrominos';
 
 export type PositionType = { 
     x: number; 
@@ -20,12 +21,40 @@ const playerStartingState: PlayerStateType = {
         x: 0, 
         y: 0 
     },
-    tetromino: randomTetromino().shape,
+    tetromino: TETROMINOS[0].shape,
     collided: false,
 };
 
 export const usePlayer = () => {
     const [ player, setPlayer ] = useState(playerStartingState);
+
+    const rotate = (matrix: TetrominoShapeType, direction: number) => {
+        const rotatedTetromino = matrix.map((_, index) => 
+            matrix.map(col => col[index]),
+        );
+
+        if (direction > 0) return rotatedTetromino.map(row => row.reverse());
+
+        return rotatedTetromino.reverse();
+    }
+
+    const playerRotate = (stage: StageType, direction: number) => {
+        const clonedPlayer = JSON.parse(JSON.stringify(player));
+        clonedPlayer.tetromino = rotate(clonedPlayer.tetromino, direction);
+
+        const pos = clonedPlayer.pos.x;
+        let offset = 1;
+        while (checkCollision(clonedPlayer, stage, { x: 0, y: 0 })) {
+            clonedPlayer.pos.x += offset;
+            offset = -(offset + (offset > 0 ? 1 : -1));
+            if (offset > clonedPlayer.tetromino[0].length) {
+                rotate(clonedPlayer.tetromino, -direction);
+                clonedPlayer.pos.x = pos;
+                return;
+            }
+        }
+        setPlayer(clonedPlayer);
+    }
 
     const updatePlayerPosition = ({ x, y, collided} : PlayerPositionType) => {
         setPlayer(prev => ({
@@ -49,5 +78,5 @@ export const usePlayer = () => {
         })
     }, []);
 
-    return [ player, updatePlayerPosition, resetPlayer ];
+    return [ player, updatePlayerPosition, resetPlayer, playerRotate ] as const;
 }

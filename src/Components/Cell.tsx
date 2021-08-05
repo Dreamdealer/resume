@@ -21,7 +21,7 @@ const StyledCube = styled.div<{ transparent?: boolean }>`
     width: ${tetrisConfig.cell.size}px;
     height: ${tetrisConfig.cell.size}px;
     position: relative;
-    background: ${transparent => transparent ? 'rgba(255,0,0,.1)' : 'transparent'};
+    /* background: ${transparent => transparent ? 'rgba(255,0,0,.1)' : 'transparent'}; */
     transform-style: preserve-3d;
     transform:  translateX(${tetrisConfig.cell.spacing / 2}px) translateY(${tetrisConfig.cell.spacing / 2}px) translateZ(${tetrisConfig.cell.size}px);
     transition: transform 1s;
