@@ -11,8 +11,6 @@ const StyledStage = styled.div`
     flex-flow: column nowrap;
     justify-content: flex-end;
     align-items: flex-end;
-    transform-style: preserve-3d;
-    transform: rotateX(35deg) rotateY(0deg) translateZ(100px);
     background: ${tetrisConfig.stage.backgroundColor};
     background-image: 
         linear-gradient(${tetrisConfig.stage.lineColor} 1px, transparent 1px),
