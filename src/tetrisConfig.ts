@@ -1,6 +1,6 @@
 export const tetrisConfig = {
     stage: {
-        width: 6,
+        width: 12,
         height: 16,
         backgroundColor: 'transparent',
         lineColor: '#000',

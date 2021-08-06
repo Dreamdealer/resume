@@ -8,9 +8,9 @@ type PropsType = {
 
 const handleFaceTransform = (face: string) => {
     switch (face) {
-        case "right": return 'rotateY( 90deg)';
+        case "right": return 'rotateY(90deg)';
         case "back": return 'rotateY(180deg)';
-        case "left": return 'rotateY(180deg)';
+        case "left": return 'rotateY(-90deg)';
         case "top": return 'rotateX(90deg)';
         case "bottom": return 'rotateX(-90deg)';
         default: case "front": return 'rotateY(0deg)';
@@ -21,10 +21,21 @@ const StyledCube = styled.div<{ transparent?: boolean }>`
     width: ${tetrisConfig.cell.size}px;
     height: ${tetrisConfig.cell.size}px;
     position: relative;
-    /* background: ${transparent => transparent ? 'rgba(255,0,0,.1)' : 'transparent'}; */
     transform-style: preserve-3d;
     transform:  translateX(${tetrisConfig.cell.spacing / 2}px) translateY(${tetrisConfig.cell.spacing / 2}px) translateZ(${tetrisConfig.cell.size}px);
     transition: transform 1s;
+    
+    ${({transparent}) => !transparent && `
+        &::after {
+            content: '';
+            position: absolute;
+            width: ${tetrisConfig.cell.size}px;
+            height: ${tetrisConfig.cell.size}px;
+            background: rgba(0,0,0,.1);
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+            transform: translateZ(-${tetrisConfig.cell.size}px);
+        }
+    `}
 `
 
 const StyledCubeFace = styled.div<{ face: string; color: string; }>`
