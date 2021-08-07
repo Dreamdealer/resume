@@ -5,6 +5,7 @@ import { useStage } from '../Hooks/useStage';
 import useInterval from '../Hooks/useInterval';
 import styled from 'styled-components';
 import { createStage, checkCollision } from '../gameHelpers';
+import { useGameStatus } from '../Hooks/useGameStatus';
 
 const StyledTetrisContainer = styled.div`
     height: 100vh;
@@ -52,8 +53,11 @@ const StyledButton = styled.button`
 const Tetris = () => {
     const [ dropTime, setDropTime ] = useState<null | number>(null);
     const [ gameOver, setGameOver ] = useState(false);
+    const [ gamePaused, setGamePaused ] = useState(false);
+    const [ gameStarted, setGameStarted ] = useState(false);
     const [ player, updatePlayerPosition, resetPlayer, playerRotate ] = usePlayer();
     const [ stage, setStage, rowsCleared ] = useStage(player, resetPlayer);
+    const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
     
     const movePlayer = (dir: number) => {
         if (!checkCollision(player, stage, { x: dir, y: 0 })) {
@@ -65,10 +69,20 @@ const Tetris = () => {
         setStage(createStage());
         setDropTime(1000);
         resetPlayer();
+        setScore(0);
+        setLevel(0);
+        setRows(0);
         setGameOver(false);
+        setGameStarted(true);
     }
 
     const drop = () => {
+        // Increase level and speed when player has cleared 10 rows
+        if (rows > (level + 1) * 10) {
+            setLevel(prev => prev + 1);
+            setDropTime(1000 / (level + 1) + 200);
+        }
+
         if (!checkCollision(player, stage, { x: 0, y: 1 })) {
             updatePlayerPosition({ x: 0, y: 1, collided: false });
         } else {
@@ -81,9 +95,19 @@ const Tetris = () => {
         }
     }
 
+    const pauseGame = () => {
+        setGamePaused(true);
+        setDropTime(null);
+    }
+
+    const continueGame = () => {
+        setGamePaused(false);
+        setDropTime(1000 / (level + 1));
+    };
+
     const keyUp = ({ keyCode }: { keyCode: number}) => {
         if (!gameOver && keyCode === 40) {
-            setDropTime(1000);
+            setDropTime(1000 / (level + 1));
         }
     }
 
@@ -91,6 +115,7 @@ const Tetris = () => {
         setDropTime(null);
         drop(); 
     }
+
 
     const move = ({ keyCode } : { keyCode: number}) => {
         if (!gameOver) {
@@ -113,12 +138,16 @@ const Tetris = () => {
             event.preventDefault(); 
         }}>
             <StyledControlsContainer>
-                <StyledButton onClick={() => { startGame(); }}>
-                    Start Game
-                </StyledButton>
-                <StyledScoreBoard>
-                    {rowsCleared * 100} points
-                </StyledScoreBoard>
+                {!gameStarted ? (
+                    <StyledButton onClick={() => { startGame(); }}>Start Game</StyledButton>
+                ) : (
+                    <StyledButton onClick={() => { gamePaused ? continueGame() : pauseGame() }}>
+                        {gamePaused ? 'Continue Game' : 'Pause Game'}
+                    </StyledButton>
+                )}
+                <StyledScoreBoard>Score: {score}</StyledScoreBoard>
+                <StyledScoreBoard>Rows: {rows}</StyledScoreBoard>
+                <StyledScoreBoard>Level: {level}</StyledScoreBoard>
             </StyledControlsContainer>
             <Stage stage={stage} />
         </StyledTetrisContainer>
