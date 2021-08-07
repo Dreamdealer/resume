@@ -1,0 +1,7 @@
+__generated__
+__schema__
+translations
+.next
+.git
+node_modules
+dist

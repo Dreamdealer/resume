@@ -4,9 +4,9 @@ const Button = styled.button`
     outline: none;
     border: 2px solid #000;
     border-radius: 8px;
-    line-height: 50px;
+    line-height: 25px;
     font-size: 20px;
-    padding: 0 20px;
+    padding: 20px;
     background: #FFF;
     font-family: inherit;
 

@@ -7,17 +7,18 @@ import styled from 'styled-components';
 import { createStage, checkCollision } from '../gameHelpers';
 import { useGameStatus } from '../Hooks/useGameStatus';
 import Display from './Display';
-import { tetrisConfig } from '../tetrisConfig';
+import { tetrisConfig } from '../Config/tetrisConfig';
 import Button from './Button';
+import GameOver from './GameOver';
 
-const StyledTetrisContainer = styled.div<{ gameOver: boolean }>`
-    height: 100vh;
+const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
+    min-height: 100%;
     outline: none;
     display: flex;
     flex-flow: row nowrap;
     transform-style: preserve-3d;
-    transform: rotateX(35deg) rotateY(0deg) translateZ(100px);
-    filter: ${({ gameOver }) => gameOver ? 'blur(5px)' : 'none'};
+    transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
+    filter: ${({ gameOver }) => (gameOver ? 'blur(5px)' : 'none')};
     font-family: 'Press Start 2P', cursive;
 `;
 
@@ -30,36 +31,26 @@ const StyledControlsContainer = styled.div`
     align-items: stretch;
 `;
 
-const StyledGameOverContainer = styled.div`
-    position: fixed;
-    display: flex;
+const StyledSlider = styled.input`
     width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 99;
-    color: #000;
-    font-size: 60px;
-    font-size: 8vw;
-    display: flex;
-    flex-flow: column wrap;
 `;
 
 const Tetris = () => {
-    const [ dropTime, setDropTime ] = useState<null | number>(null);
-    const [ gameOver, setGameOver ] = useState(false);
-    const [ gamePaused, setGamePaused ] = useState(false);
-    const [ gameStarted, setGameStarted ] = useState(false);
-    const [ player, updatePlayerPosition, resetPlayer, playerRotate ] = usePlayer();
-    const [ stage, setStage, rowsCleared ] = useStage(player, resetPlayer);
+    const [tilt, setTilt] = useState(0);
+    const [dropTime, setDropTime] = useState<null | number>(null);
+    const [gameOver, setGameOver] = useState(false);
+    const [gamePaused, setGamePaused] = useState(false);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [player, updatePlayerPosition, resetPlayer, playerRotate] = usePlayer();
+    const [stage, setStage, rowsCleared, activeColumns] = useStage(player, resetPlayer);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
-    
+
     const movePlayer = (dir: number) => {
         continueGame();
         if (!checkCollision(player, stage, { x: dir, y: 0 })) {
             updatePlayerPosition({ x: dir, y: 0, collided: false });
         }
-    }
+    };
 
     const startGame = () => {
         setStage(createStage());
@@ -70,8 +61,8 @@ const Tetris = () => {
         setRows(0);
         setGameOver(false);
         setGameStarted(true);
-    }
-    
+    };
+
     const moveTetrominoDown = (y: number) => {
         // Increase level and speed when player has cleared 10 rows
         if (rows > (level + 1) * 10) {
@@ -80,8 +71,8 @@ const Tetris = () => {
         }
 
         // Check how far we can move without colliding
-        let canMoveTo = 0; 
-        
+        let canMoveTo = 0;
+
         for (let tryToMoveTo = 1; tryToMoveTo <= y; tryToMoveTo += 1) {
             if (checkCollision(player, stage, { x: 0, y: tryToMoveTo })) {
                 break;
@@ -103,57 +94,71 @@ const Tetris = () => {
             }
             updatePlayerPosition({ x: 0, y: canMoveTo, collided: true });
         }
-    }
+    };
 
     const pauseGame = () => {
         setGamePaused(true);
         setDropTime(null);
-    }
+    };
 
     const continueGame = () => {
         setGamePaused(false);
         setDropTime(1000 / (level + 1));
     };
 
-    const keyUp = ({ keyCode }: { keyCode: number}) => {
+    const keyUp = ({ keyCode }: { keyCode: number }) => {
         if (!gameOver) {
             if (keyCode === 40 || keyCode === 34 || keyCode === 35) {
                 continueGame();
             }
         }
-    }
+    };
 
     const dropPlayer = () => {
         setDropTime(null);
         moveTetrominoDown(1);
-    }
+    };
 
     const fullDropPlayer = () => {
         setDropTime(null);
         moveTetrominoDown(tetrisConfig.stage.height);
-    }
+    };
 
+    const move = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        let preventDefault = true;
 
-    const move = ({ keyCode } : { keyCode: number}) => {
         if (!gameOver) {
-            switch (keyCode) {
-                case 37: 
-                    movePlayer(-1); break;
-                case 39: 
-                    movePlayer(1); break;
-                case 40: 
-                    dropPlayer(); break;
-                case 38: 
-                    playerRotate(stage, 1); break;
-                case 34:
-                case 35: 
-                    fullDropPlayer(); break;
-                default: 
-                    console.log(`Unused keystroke: ${keyCode}`); 
+            switch (event.keyCode) {
+                case 37: // LEFT
+                    movePlayer(-1);
+                    break;
+                case 39: // RIGHT
+                    movePlayer(1);
+                    break;
+                case 40: // DOWN
+                    dropPlayer();
+                    break;
+                case 38: // UP
+                    playerRotate(stage, 1);
+                    break;
+                case 80: // P
+                    gamePaused ? continueGame() : pauseGame();
+                    break;
+                case 34: // Page Down
+                case 35: // End
+                    fullDropPlayer();
+                    break;
+                default:
+                    console.log(`Unused keystroke: ${event.keyCode}`);
+                    preventDefault = false;
                     break;
             }
         }
-    }
+
+        if (preventDefault) {
+            event.preventDefault();
+        }
+    };
 
     useInterval(() => {
         moveTetrominoDown(1);
@@ -162,37 +167,71 @@ const Tetris = () => {
     return (
         <>
             {gameOver && (
-                <StyledGameOverContainer>
+                <GameOver>
                     <p>Game Over</p>
-                    <Button onClick={() => { startGame(); }}>Restart Game</Button>
-                </StyledGameOverContainer>
+                    <Button
+                        onClick={() => {
+                            startGame();
+                        }}
+                    >
+                        Restart Game
+                    </Button>
+                </GameOver>
             )}
-            <StyledTetrisContainer 
+            <StyledTetrisContainer
+                tilt={tilt}
                 gameOver={gameOver}
-                role="button" 
-                tabIndex={0} 
-                onKeyUp={keyUp} 
-                onKeyDown={event => { 
-                    move(event); 
-                    event.preventDefault(); 
+                role="button"
+                tabIndex={0}
+                onKeyUp={keyUp}
+                onKeyDown={event => {
+                    move(event);
                 }}
             >
                 <StyledControlsContainer>
                     {!gameStarted ? (
-                        <Button onClick={() => { startGame(); }}>Start Game</Button>
+                        <Button
+                            onClick={() => {
+                                startGame();
+                            }}
+                        >
+                            Start Game
+                        </Button>
                     ) : (
-                        <Button onClick={() => { gamePaused ? continueGame() : pauseGame() }}>
+                        <Button
+                            onClick={() => {
+                                gamePaused ? continueGame() : pauseGame();
+                            }}
+                        >
                             {gamePaused ? 'Continue Game' : 'Pause Game'}
                         </Button>
                     )}
-                    <Display text={`Score: ${score}`} />
-                    <Display text={`Rows: ${rows}`} />
-                    <Display text={`Level: ${level}`} />
+                    <Display>Score: {score}</Display>
+                    <Display>Rows: {rows}</Display>
+                    <Display>Level: {level}</Display>
+                    <Display>
+                        Tilt:
+                        <StyledSlider
+                            type="range"
+                            name="volume"
+                            value={tilt}
+                            min="0"
+                            max="45"
+                            onChange={({ target }) => {
+                                setTilt(parseInt(target.value));
+                            }}
+                        />
+                    </Display>
                 </StyledControlsContainer>
-                <Stage stage={stage} showInstructions={!gameStarted} />
+                <Stage
+                    paused={gamePaused}
+                    stage={stage}
+                    showInstructions={!gameStarted}
+                    activeColumns={activeColumns}
+                />
             </StyledTetrisContainer>
         </>
-    )
-}
+    );
+};
 
 export default Tetris;

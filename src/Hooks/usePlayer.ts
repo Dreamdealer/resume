@@ -1,42 +1,40 @@
 import { useCallback, useState } from 'react';
 import { checkCollision, StageType } from '../gameHelpers';
-import { tetrisConfig } from '../tetrisConfig';
-import { randomTetromino, TETROMINOS, TetrominoShapeType } from '../tetrominos';
+import { tetrisConfig } from '../Config/tetrisConfig';
+import { randomTetromino, TETROMINOS, TetrominoShapeType } from '../Config/tetrominos';
 
-export type PositionType = { 
-    x: number; 
+export type PositionType = {
+    x: number;
     y: number;
-}
+};
 
 export type PlayerStateType = {
     pos: PositionType;
     tetromino: TetrominoShapeType;
     collided: boolean;
-}
+};
 
-export type PlayerPositionType = PositionType & { collided: boolean; }
+export type PlayerPositionType = PositionType & { collided: boolean };
 
 const playerStartingState: PlayerStateType = {
-    pos: { 
-        x: 0, 
-        y: 0 
+    pos: {
+        x: 0,
+        y: 0,
     },
     tetromino: TETROMINOS[0].shape,
     collided: false,
 };
 
 export const usePlayer = () => {
-    const [ player, setPlayer ] = useState(playerStartingState);
+    const [player, setPlayer] = useState(playerStartingState);
 
     const rotate = (matrix: TetrominoShapeType, direction: number) => {
-        const rotatedTetromino = matrix.map((_, index) => 
-            matrix.map(col => col[index]),
-        );
+        const rotatedTetromino = matrix.map((_, index) => matrix.map(col => col[index]));
 
         if (direction > 0) return rotatedTetromino.map(row => row.reverse());
 
         return rotatedTetromino.reverse();
-    }
+    };
 
     const playerRotate = (stage: StageType, direction: number) => {
         const clonedPlayer = JSON.parse(JSON.stringify(player));
@@ -54,29 +52,29 @@ export const usePlayer = () => {
             }
         }
         setPlayer(clonedPlayer);
-    }
+    };
 
-    const updatePlayerPosition = ({ x, y, collided} : PlayerPositionType) => {
+    const updatePlayerPosition = ({ x, y, collided }: PlayerPositionType) => {
         setPlayer(prev => ({
             ...prev,
-            pos: { 
-                x: prev.pos.x += x, 
-                y: prev.pos.y += y 
+            pos: {
+                x: (prev.pos.x += x),
+                y: (prev.pos.y += y),
             },
             collided,
-        }))
-    }
+        }));
+    };
 
     const resetPlayer = useCallback(() => {
         setPlayer({
-            pos: { 
-                x: (tetrisConfig.stage.width / 2) - 2, 
-                y: 0 
+            pos: {
+                x: tetrisConfig.stage.width / 2 - 2,
+                y: 0,
             },
             tetromino: randomTetromino().shape,
-            collided: false, 
-        })
+            collided: false,
+        });
     }, []);
 
-    return [ player, updatePlayerPosition, resetPlayer, playerRotate ] as const;
-}
+    return [player, updatePlayerPosition, resetPlayer, playerRotate] as const;
+};
