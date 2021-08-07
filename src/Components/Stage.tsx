@@ -4,8 +4,9 @@ import { tetrisConfig } from '../Config/tetrisConfig';
 import { TETROMINOS, TetrominosType } from '../Config/tetrominos';
 import { StageType } from '../gameHelpers';
 import Cell, { StyledCube } from './Cell';
+import Instructions from './Instructions';
 
-const StyledStage = styled.div<{ showInstructions: boolean; paused: boolean }>`
+export const StyledStage = styled.div<{ showInstructions: boolean; paused: boolean }>`
     width: ${() => `${tetrisConfig.stage.width * tetrisConfig.cell.size}px`};
     height: ${() => `${tetrisConfig.stage.height * tetrisConfig.cell.size}px`};
     display: flex;
@@ -33,19 +34,6 @@ const StyledStage = styled.div<{ showInstructions: boolean; paused: boolean }>`
         box-shadow: none;
         filter: ${({ paused }) => (paused ? 'blur(15px)' : 'none')};
     }
-`;
-
-const StyledInstructions = styled.div`
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #000;
-    padding: 20px;
 `;
 
 const StyledPause = styled.div`
@@ -90,26 +78,7 @@ type PropsType = {
 const Stage: FC<PropsType> = props => {
     return (
         <StyledStage showInstructions={props.showInstructions} paused={props.paused}>
-            {props.showInstructions && (
-                <StyledInstructions>
-                    Keybindings:
-                    <br />
-                    <br />
-                    Up = Rotate tetromino
-                    <br />
-                    <br />
-                    Left = Move tetromino left one cell
-                    <br />
-                    <br />
-                    Right = Move tetromino right one cell
-                    <br />
-                    <br />
-                    Down = Move tetromino down one cell
-                    <br />
-                    <br />
-                    PageDown or End = Move tetromino all the way down
-                </StyledInstructions>
-            )}
+            {props.showInstructions && <Instructions />}
             {props.paused && <StyledPause>Paused</StyledPause>}
             {props.activeColumns.size > 0 && (
                 <StyledColumnGuide {...props.activeColumns} columnWidth={tetrisConfig.cell.size} />

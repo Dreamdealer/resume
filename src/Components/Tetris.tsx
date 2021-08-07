@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Stage from './Stage';
+import Stage, { StyledStage } from './Stage';
 import { usePlayer } from '../Hooks/usePlayer';
 import { useStage } from '../Hooks/useStage';
 import useInterval from '../Hooks/useInterval';
@@ -11,6 +11,19 @@ import { tetrisConfig } from '../Config/tetrisConfig';
 import Button from './Button';
 import GameOver from './GameOver';
 
+const StyledControlsContainer = styled.div`
+    margin-right: 20px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+`;
+
+const StyledDisplays = styled.div`
+    display: flex;
+    flex-flow: column wrap;
+`;
+
 const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
     min-height: 100%;
     outline: none;
@@ -20,15 +33,45 @@ const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
     transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
     filter: ${({ gameOver }) => (gameOver ? 'blur(5px)' : 'none')};
     font-family: 'Press Start 2P', cursive;
-`;
 
-const StyledControlsContainer = styled.div`
-    width: 300px;
-    margin-right: 20px;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: flex-start;
-    align-items: stretch;
+    // desktop size
+    @media (min-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
+        flex-flow: row nowrap;
+
+        ${StyledControlsContainer} {
+            width: 300px;
+        }
+    }
+
+    // mobile size
+    @media (max-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
+        flex-flow: column nowrap;
+
+        ${Display} {
+            font-size: 14px;
+            margin-top: 0;
+            padding: 8px;
+            line-height: 14px;
+            display: block;
+            border: 0;
+        }
+
+        ${StyledControlsContainer} {
+            margin: 0;
+            padding: 20px;
+
+            ${StyledDisplays} {
+                border: 2px solid #000;
+                border-radius: 8px;
+                flex-flow: row wrap;
+                margin: 10px 0;
+                background: #fff;
+            }
+        }
+
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 const StyledSlider = styled.input`
@@ -206,22 +249,24 @@ const Tetris = () => {
                             {gamePaused ? 'Continue Game' : 'Pause Game'}
                         </Button>
                     )}
-                    <Display>Score: {score}</Display>
-                    <Display>Rows: {rows}</Display>
-                    <Display>Level: {level}</Display>
-                    <Display>
-                        Tilt:
-                        <StyledSlider
-                            type="range"
-                            name="volume"
-                            value={tilt}
-                            min="0"
-                            max="45"
-                            onChange={({ target }) => {
-                                setTilt(parseInt(target.value));
-                            }}
-                        />
-                    </Display>
+                    <StyledDisplays>
+                        <Display>Score: {score}</Display>
+                        <Display>Rows: {rows}</Display>
+                        <Display>Level: {level}</Display>
+                        <Display>
+                            Tilt:
+                            <StyledSlider
+                                type="range"
+                                name="volume"
+                                value={tilt}
+                                min="0"
+                                max="45"
+                                onChange={({ target }) => {
+                                    setTilt(parseInt(target.value));
+                                }}
+                            />
+                        </Display>
+                    </StyledDisplays>
                 </StyledControlsContainer>
                 <Stage
                     paused={gamePaused}

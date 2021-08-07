@@ -6,10 +6,13 @@ const Display = styled.div`
     border-radius: 8px;
     line-height: 50px;
     font-size: 20px;
-    background: #FFF;
+    background: #fff;
     margin-top: 20px;
     color: #000;
     padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export default Display;
