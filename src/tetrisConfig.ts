@@ -1,9 +1,9 @@
 export const tetrisConfig = {
     stage: {
-        width: 8,
-        height: 16,
-        backgroundColor: 'transparent',
-        lineColor: '#000',
+        width: 10,
+        height: 20,
+        backgroundColor: '#FFF',
+        lineColor: '#BBB',
     },
     cell: {
         size: 38,

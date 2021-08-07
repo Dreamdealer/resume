@@ -6,18 +6,20 @@ import useInterval from '../Hooks/useInterval';
 import styled from 'styled-components';
 import { createStage, checkCollision } from '../gameHelpers';
 import { useGameStatus } from '../Hooks/useGameStatus';
+import Display from './Display';
 
-const StyledTetrisContainer = styled.div`
+const StyledTetrisContainer = styled.div<{ gameOver: boolean }>`
     height: 100vh;
     outline: none;
     display: flex;
     flex-flow: row nowrap;
     transform-style: preserve-3d;
     transform: rotateX(35deg) rotateY(0deg) translateZ(100px);
+    filter: ${({ gameOver }) => gameOver ? 'blur(5px)' : 'none'};
 `;
 
 const StyledControlsContainer = styled.div`
-    width: 200px;
+    width: 300px;
     margin-right: 20px;
     display: flex;
     flex-flow: column wrap;
@@ -25,24 +27,30 @@ const StyledControlsContainer = styled.div`
     align-items: stretch;
 `;
 
-const StyledScoreBoard = styled.div`
-    border: 2px solid #000;
-    border-radius: 8px;
-    line-height: 40px;
-    font-size: 20px;
-    background: #FFF;
-    margin-top: 20px;
+const StyledGameOverContainer = styled.div`
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    font-family: 'Press Start 2P', cursive;
     color: #000;
-    text-align: center;
+    font-size: 60px;
+    font-size: 8vw;
+    display: flex;
+    flex-flow: column wrap;
 `;
 
 const StyledButton = styled.button`
     outline: none;
     border: 2px solid #000;
     border-radius: 8px;
-    line-height: 40px;
+    line-height: 50px;
     font-size: 20px;
     background: #FFF;
+    font-family: 'Press Start 2P', cursive;
 
     &:hover {
         cursor: pointer;
@@ -88,6 +96,7 @@ const Tetris = () => {
         } else {
             if (player.pos.y < 1) {
                 console.log('GAME OVER');
+                setGameStarted(false);
                 setGameOver(true);
                 setDropTime(null);
             }
@@ -133,24 +142,38 @@ const Tetris = () => {
     }, dropTime);
 
     return (
-        <StyledTetrisContainer role="button" tabIndex={0} onKeyUp={keyUp} onKeyDown={event => { 
-            move(event); 
-            event.preventDefault(); 
-        }}>
-            <StyledControlsContainer>
-                {!gameStarted ? (
-                    <StyledButton onClick={() => { startGame(); }}>Start Game</StyledButton>
-                ) : (
-                    <StyledButton onClick={() => { gamePaused ? continueGame() : pauseGame() }}>
-                        {gamePaused ? 'Continue Game' : 'Pause Game'}
-                    </StyledButton>
-                )}
-                <StyledScoreBoard>Score: {score}</StyledScoreBoard>
-                <StyledScoreBoard>Rows: {rows}</StyledScoreBoard>
-                <StyledScoreBoard>Level: {level}</StyledScoreBoard>
-            </StyledControlsContainer>
-            <Stage stage={stage} />
-        </StyledTetrisContainer>
+        <>
+            {gameOver && (
+                <StyledGameOverContainer>
+                    <p>Game Over</p>
+                    <StyledButton onClick={() => { startGame(); }}>Restart Game</StyledButton>
+                </StyledGameOverContainer>
+            )}
+            <StyledTetrisContainer 
+                gameOver={gameOver}
+                role="button" 
+                tabIndex={0} 
+                onKeyUp={keyUp} 
+                onKeyDown={event => { 
+                    move(event); 
+                    event.preventDefault(); 
+                }}
+            >
+                <StyledControlsContainer>
+                    {!gameStarted ? (
+                        <StyledButton onClick={() => { startGame(); }}>Start Game</StyledButton>
+                    ) : (
+                        <StyledButton onClick={() => { gamePaused ? continueGame() : pauseGame() }}>
+                            {gamePaused ? 'Continue Game' : 'Pause Game'}
+                        </StyledButton>
+                    )}
+                    <Display text={`Score: ${score}`} />
+                    <Display text={`Rows: ${rows}`} />
+                    <Display text={`Level: ${level}`} />
+                </StyledControlsContainer>
+                <Stage stage={stage} />
+            </StyledTetrisContainer>
+        </>
     )
 }
 

@@ -18,6 +18,8 @@ const StyledStage = styled.div`
     background-size: ${tetrisConfig.cell.size}px ${tetrisConfig.cell.size}px, ${tetrisConfig.cell.size}px ${tetrisConfig.cell.size}px;
     background-position: -1px -1px, -1px -1px;
     box-shadow: 0 0 0 1px ${tetrisConfig.stage.lineColor} inset;
+    border: 2px solid #000;
+    border-radius: 8px;
 `
 
 const StyledRow = styled.div`
