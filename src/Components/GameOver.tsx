@@ -14,6 +14,8 @@ const GameOver = styled.div`
     display: flex;
     flex-flow: column wrap;
     font-family: 'Press Start 2P', cursive;
+    text-shadow: 10px 10px 0 #fff, 0px 10px 0 #fff, -10px 10px 0 #fff, 0px 0px 0 #fff, 0px -10px 0 #fff,
+        10px -10px 0 #fff, -10px -10px 0 #fff, 0 0 30px #000;
 `;
 
 export default GameOver;

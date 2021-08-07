@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Stage, { StyledStage } from './Stage';
+import React, { useRef, useState } from 'react';
+import Stage from './Stage';
 import { usePlayer } from '../Hooks/usePlayer';
 import { useStage } from '../Hooks/useStage';
 import useInterval from '../Hooks/useInterval';
@@ -87,6 +87,7 @@ const Tetris = () => {
     const [player, updatePlayerPosition, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared, activeColumns] = useStage(player, resetPlayer);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
+    const gameRef = useRef<HTMLDivElement>(null);
 
     const movePlayer = (dir: number) => {
         continueGame();
@@ -215,6 +216,7 @@ const Tetris = () => {
                     <Button
                         onClick={() => {
                             startGame();
+                            gameRef?.current?.focus();
                         }}
                     >
                         Restart Game
@@ -222,6 +224,7 @@ const Tetris = () => {
                 </GameOver>
             )}
             <StyledTetrisContainer
+                ref={gameRef}
                 tilt={tilt}
                 gameOver={gameOver}
                 role="button"
