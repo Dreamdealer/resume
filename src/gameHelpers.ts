@@ -1,3 +1,4 @@
+import { PlayerStateType } from './Hooks/usePlayer';
 import { tetrisConfig } from './tetrisConfig';
 import { TetrominoShapeType } from './tetrominos';
 
@@ -13,7 +14,11 @@ export const createStage = (): StageType => {
     return emptyStage;
 }
 
-export const checkCollision = (player: any, stage: any, { x: moveX, y: moveY }: { x: number, y: number}) => {
+export const checkCollision = (
+    player: PlayerStateType, 
+    stage: StageType, 
+    { x: moveX, y: moveY }: { x: number, y: number}
+) => {
     for (let y = 0; y < player.tetromino.length; y += 1) {
     for (let x = 0; x < player.tetromino[y].length; x += 1) {
       // 1. Check that we're on an actual Tetromino cell
