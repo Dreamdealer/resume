@@ -186,6 +186,7 @@ const Tetris = () => {
                 }}
                 onPushDown={() => {
                     playerMovement('DOWN');
+                    playerMovement('UNPAUSE');
                 }}
             />
             <StyledTetrisContainer
