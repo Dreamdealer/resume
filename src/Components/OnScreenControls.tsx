@@ -10,10 +10,38 @@ type PropsType = {
 
 const OnScreenControls: FC<PropsType> = props => (
     <StyledControlsContainer>
-        <StyledControl onClick={() => props.onPushLeft()}>Left</StyledControl>
-        <StyledControl onClick={() => props.onPushRotate()}>Rotate</StyledControl>
-        <StyledControl onClick={() => props.onPushDown()}>Down</StyledControl>
-        <StyledControl onClick={() => props.onPushRight()}>Right</StyledControl>
+        <StyledControl
+            onClick={e => {
+                props.onPushLeft();
+                e.preventDefault();
+            }}
+        >
+            Left
+        </StyledControl>
+        <StyledControl
+            onClick={e => {
+                props.onPushRotate();
+                e.preventDefault();
+            }}
+        >
+            Rotate
+        </StyledControl>
+        <StyledControl
+            onClick={e => {
+                props.onPushDown();
+                e.preventDefault();
+            }}
+        >
+            Down
+        </StyledControl>
+        <StyledControl
+            onClick={e => {
+                props.onPushRight();
+                e.preventDefault();
+            }}
+        >
+            Right
+        </StyledControl>
     </StyledControlsContainer>
 );
 
