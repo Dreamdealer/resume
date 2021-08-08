@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+// tSS = Text Shadow Size
+const tSS = '1vw';
+
 const GameOver = styled.div`
     position: fixed;
     display: flex;
@@ -14,8 +17,8 @@ const GameOver = styled.div`
     display: flex;
     flex-flow: column wrap;
     font-family: 'Press Start 2P', cursive;
-    text-shadow: 10px 10px 0 #fff, 0px 10px 0 #fff, -10px 10px 0 #fff, 0px 0px 0 #fff, 0px -10px 0 #fff,
-        10px -10px 0 #fff, -10px -10px 0 #fff, 0 0 30px #000;
+    text-shadow: ${tSS} ${tSS} 0 #fff, ${tSS} 0 0 #fff, 0 ${tSS} 0 #fff, -${tSS} ${tSS} 0 #fff, 00px 0 #fff,
+        0-${tSS} 0 #fff, ${tSS} -${tSS} 0 #fff, -${tSS} -${tSS} 0 #fff, 0 0 30px #000;
 `;
 
 export default GameOver;

@@ -3,80 +3,16 @@ import Stage from './Stage';
 import { usePlayer } from '../Hooks/usePlayer';
 import { useStage } from '../Hooks/useStage';
 import useInterval from '../Hooks/useInterval';
-import styled from 'styled-components';
 import { createStage, checkCollision } from '../gameHelpers';
 import { useGameStatus } from '../Hooks/useGameStatus';
 import Display from './Display';
 import { tetrisConfig } from '../Config/tetrisConfig';
 import Button from './Button';
 import GameOver from './GameOver';
+import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays, StyledSlider } from './Styles';
+import OnScreenControls from './OnScreenControls';
 
-const StyledControlsContainer = styled.div`
-    margin-right: 20px;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: flex-start;
-    align-items: stretch;
-`;
-
-const StyledDisplays = styled.div`
-    display: flex;
-    flex-flow: column wrap;
-`;
-
-const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
-    min-height: 100%;
-    outline: none;
-    display: flex;
-    flex-flow: row nowrap;
-    transform-style: preserve-3d;
-    transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
-    filter: ${({ gameOver }) => (gameOver ? 'blur(5px)' : 'none')};
-    font-family: 'Press Start 2P', cursive;
-
-    // desktop size
-    @media (min-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
-        flex-flow: row nowrap;
-
-        ${StyledControlsContainer} {
-            width: 300px;
-        }
-    }
-
-    // mobile size
-    @media (max-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
-        flex-flow: column nowrap;
-
-        ${Display} {
-            font-size: 14px;
-            margin-top: 0;
-            padding: 8px;
-            line-height: 14px;
-            display: block;
-            border: 0;
-        }
-
-        ${StyledControlsContainer} {
-            margin: 0;
-            padding: 20px;
-
-            ${StyledDisplays} {
-                border: 2px solid #000;
-                border-radius: 8px;
-                flex-flow: row wrap;
-                margin: 10px 0;
-                background: #fff;
-            }
-        }
-
-        justify-content: center;
-        align-items: center;
-    }
-`;
-
-const StyledSlider = styled.input`
-    width: 100%;
-`;
+type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 
 const Tetris = () => {
     const [tilt, setTilt] = useState(0);
@@ -90,7 +26,7 @@ const Tetris = () => {
     const gameRef = useRef<HTMLDivElement>(null);
 
     const movePlayer = (dir: number) => {
-        continueGame();
+        playerMovement('UNPAUSE');
         if (!checkCollision(player, stage, { x: dir, y: 0 })) {
             updatePlayerPosition({ x: dir, y: 0, collided: false });
         }
@@ -140,32 +76,47 @@ const Tetris = () => {
         }
     };
 
-    const pauseGame = () => {
-        setGamePaused(true);
-        setDropTime(null);
-    };
-
-    const continueGame = () => {
-        setGamePaused(false);
-        setDropTime(1000 / (level + 1));
-    };
-
     const keyUp = ({ keyCode }: { keyCode: number }) => {
         if (!gameOver) {
             if (keyCode === 40 || keyCode === 34 || keyCode === 35) {
-                continueGame();
+                playerMovement('UNPAUSE');
             }
         }
     };
 
-    const dropPlayer = () => {
-        setDropTime(null);
-        moveTetrominoDown(1);
-    };
-
-    const fullDropPlayer = () => {
-        setDropTime(null);
-        moveTetrominoDown(tetrisConfig.stage.height);
+    const playerMovement = (action: PlayerMovementType) => {
+        switch (action) {
+            case 'LEFT':
+                movePlayer(-1);
+                break;
+            case 'RIGHT':
+                movePlayer(1);
+                break;
+            case 'DOWN':
+                setDropTime(null);
+                moveTetrominoDown(1);
+                break;
+            case 'FULLDOWN':
+                setDropTime(null);
+                moveTetrominoDown(tetrisConfig.stage.height);
+                break;
+            case 'ROTATE':
+                playerRotate(stage, 1);
+                break;
+            case 'TOGGLE_PAUSE':
+                if (gamePaused) {
+                    setGamePaused(false);
+                    setDropTime(1000 / (level + 1));
+                } else {
+                    setGamePaused(true);
+                    setDropTime(null);
+                }
+                break;
+            case 'UNPAUSE':
+                setGamePaused(false);
+                setDropTime(1000 / (level + 1));
+                break;
+        }
     };
 
     const move = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -174,23 +125,23 @@ const Tetris = () => {
         if (!gameOver) {
             switch (event.keyCode) {
                 case 37: // LEFT
-                    movePlayer(-1);
+                    playerMovement('LEFT');
                     break;
                 case 39: // RIGHT
-                    movePlayer(1);
+                    playerMovement('RIGHT');
                     break;
                 case 40: // DOWN
-                    dropPlayer();
+                    playerMovement('DOWN');
                     break;
                 case 38: // UP
-                    playerRotate(stage, 1);
+                    playerMovement('ROTATE');
                     break;
                 case 80: // P
-                    gamePaused ? continueGame() : pauseGame();
+                    playerMovement('TOGGLE_PAUSE');
                     break;
                 case 34: // Page Down
                 case 35: // End
-                    fullDropPlayer();
+                    playerMovement('FULLDOWN');
                     break;
                 default:
                     console.log(`Unused keystroke: ${event.keyCode}`);
@@ -223,6 +174,20 @@ const Tetris = () => {
                     </Button>
                 </GameOver>
             )}
+            <OnScreenControls
+                onPushLeft={() => {
+                    playerMovement('LEFT');
+                }}
+                onPushRotate={() => {
+                    playerMovement('ROTATE');
+                }}
+                onPushRight={() => {
+                    playerMovement('RIGHT');
+                }}
+                onPushDown={() => {
+                    playerMovement('DOWN');
+                }}
+            />
             <StyledTetrisContainer
                 ref={gameRef}
                 tilt={tilt}
@@ -234,7 +199,7 @@ const Tetris = () => {
                     move(event);
                 }}
             >
-                <StyledControlsContainer>
+                <StyledDisplaysContainer>
                     {!gameStarted ? (
                         <Button
                             onClick={() => {
@@ -246,10 +211,10 @@ const Tetris = () => {
                     ) : (
                         <Button
                             onClick={() => {
-                                gamePaused ? continueGame() : pauseGame();
+                                playerMovement('TOGGLE_PAUSE');
                             }}
                         >
-                            {gamePaused ? 'Continue Game' : 'Pause Game'}
+                            {gamePaused ? 'Continue...' : 'Pause Game'}
                         </Button>
                     )}
                     <StyledDisplays>
@@ -270,7 +235,7 @@ const Tetris = () => {
                             />
                         </Display>
                     </StyledDisplays>
-                </StyledControlsContainer>
+                </StyledDisplaysContainer>
                 <Stage
                     paused={gamePaused}
                     stage={stage}

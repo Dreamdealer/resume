@@ -1,0 +1,97 @@
+import styled from 'styled-components';
+import { tetrisConfig } from '../Config/tetrisConfig';
+import Display from './Display';
+
+export const StyledDisplaysContainer = styled.div`
+    margin-right: 20px;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+`;
+
+export const StyledDisplays = styled.div`
+    display: flex;
+    flex-flow: column wrap;
+`;
+
+export const StyledControlsContainer = styled.div`
+    display: none;
+
+    @media (max-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
+        display: flex;
+    }
+
+    position: fixed;
+    top: ${() => `${tetrisConfig.stage.height * tetrisConfig.cell.size - 50}px`};
+    height: 50px;
+    width: 100%;
+    z-index: 98;
+    justify-content: center;
+    align-items: stretch;
+`;
+
+export const StyledControl = styled.button`
+    display: flex;
+    outline: none;
+    border: none;
+    padding: 0;
+    flex-grow: 1;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+`;
+
+export const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
+    outline: none;
+    display: flex;
+    flex-flow: row nowrap;
+    transform-style: preserve-3d;
+    transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
+    filter: ${({ gameOver }) => (gameOver ? 'blur(5px)' : 'none')};
+    font-family: 'Press Start 2P', cursive;
+
+    // desktop size
+    @media (min-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
+        flex-flow: row nowrap;
+
+        ${StyledDisplaysContainer} {
+            width: 300px;
+        }
+    }
+
+    // mobile size
+    @media (max-width: ${tetrisConfig.cell.size * tetrisConfig.stage.width + 300}px) {
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        padding-top: 10px;
+
+        ${Display} {
+            font-size: 14px;
+            margin-top: 0;
+            padding: 8px;
+            line-height: 14px;
+            display: block;
+            border: 0;
+        }
+
+        ${StyledDisplaysContainer} {
+            margin: 0;
+            padding: 20px;
+            order: 2;
+
+            ${StyledDisplays} {
+                border: 2px solid #000;
+                border-radius: 8px;
+                flex-flow: row wrap;
+                margin: 10px 0;
+                background: #fff;
+            }
+        }
+    }
+`;
+
+export const StyledSlider = styled.input`
+    width: 100%;
+`;
