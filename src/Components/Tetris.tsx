@@ -255,6 +255,9 @@ const Tetris = () => {
                         )}
                         <Button
                             onClick={() => {
+                                if (!gamePaused) {
+                                    playerMovement('TOGGLE_PAUSE');
+                                }
                                 setShowSettings(true);
                             }}
                             style={{ marginLeft: '10px' }}
