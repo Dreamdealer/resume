@@ -64,15 +64,23 @@ export const StyledControl = styled.button`
     padding: 20px;
 `;
 
-export const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
+export const AppContainer = styled.div`
     background: ${({ theme }) => theme.main.background};
-    outline: none;
     width: 100%;
     display: flex;
     flex-grow: 1;
     justify-content: center;
     align-items: center;
     flex-flow: row nowrap;
+`;
+
+export const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
+    outline: none;
+    display: flex;
+    flex-grow: 1;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: flex-start;
     transform-style: preserve-3d;
     transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
     filter: ${({ gameOver }) => (gameOver ? 'blur(5px)' : 'none')};

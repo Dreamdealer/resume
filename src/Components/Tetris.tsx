@@ -9,7 +9,7 @@ import Display from './Display';
 import { tetrisConfig } from '../Config/tetrisConfig';
 import Button from './Button';
 import GameOver from './GameOver';
-import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays } from './Styles';
+import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays, AppContainer } from './Styles';
 import OnScreenControls from './OnScreenControls';
 import Settings from './Settings';
 import Box from './Box';
@@ -183,101 +183,103 @@ const Tetris = () => {
 
     return (
         <ThemeProvider theme={localSettings.theme === 'light' ? lightTheme : darkTheme}>
-            {showSettings && (
-                <Settings
-                    localSettings={localSettings}
-                    onLocalSettingsChange={settingsObject => {
-                        setLocalSettings(settingsObject);
-                        localStorage.setItem('TetrisSettings', JSON.stringify(settingsObject));
-                    }}
-                    onCloseSettings={() => {
-                        setShowSettings(false);
-                    }}
-                />
-            )}
-            {gameOver && (
-                <GameOver>
-                    <p>Game Over</p>
-                    <Button
-                        onClick={() => {
-                            startGame();
-                            gameRef?.current?.focus();
+            <AppContainer>
+                {showSettings && (
+                    <Settings
+                        localSettings={localSettings}
+                        onLocalSettingsChange={settingsObject => {
+                            setLocalSettings(settingsObject);
+                            localStorage.setItem('TetrisSettings', JSON.stringify(settingsObject));
                         }}
-                    >
-                        Restart Game
-                    </Button>
-                </GameOver>
-            )}
-            <OnScreenControls
-                onPushLeft={() => {
-                    playerMovement('LEFT');
-                }}
-                onPushRotate={() => {
-                    playerMovement('ROTATE');
-                }}
-                onPushRight={() => {
-                    playerMovement('RIGHT');
-                }}
-                onPushDown={() => {
-                    playerMovement('DOWN');
-                    playerMovement('UNPAUSE');
-                }}
-            />
-            <StyledTetrisContainer
-                ref={gameRef}
-                tilt={localSettings.tilt}
-                gameOver={gameOver}
-                role="button"
-                tabIndex={0}
-                onKeyUp={keyUp}
-                onKeyDown={event => {
-                    move(event);
-                }}
-            >
-                <StyledDisplaysContainer>
-                    <Box>
-                        {!gameStarted ? (
-                            <Button
-                                onClick={() => {
-                                    startGame();
-                                }}
-                            >
-                                Start
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={() => {
-                                    playerMovement('TOGGLE_PAUSE');
-                                }}
-                            >
-                                {gamePaused ? 'Continue' : 'Pause'}
-                            </Button>
-                        )}
+                        onCloseSettings={() => {
+                            setShowSettings(false);
+                        }}
+                    />
+                )}
+                {gameOver && (
+                    <GameOver>
+                        <p>Game Over</p>
                         <Button
                             onClick={() => {
-                                if (!gamePaused) {
-                                    playerMovement('TOGGLE_PAUSE');
-                                }
-                                setShowSettings(true);
+                                startGame();
+                                gameRef?.current?.focus();
                             }}
-                            style={{ marginLeft: '10px' }}
                         >
-                            <Slider style={{ height: '30px' }} />
+                            Restart Game
                         </Button>
-                    </Box>
-                    <StyledDisplays>
-                        <Display>Score: {score}</Display>
-                        <Display>Rows: {rows}</Display>
-                        <Display>Level: {level}</Display>
-                    </StyledDisplays>
-                </StyledDisplaysContainer>
-                <Stage
-                    paused={gamePaused}
-                    stage={stage}
-                    showInstructions={!gameStarted}
-                    activeColumns={activeColumns}
+                    </GameOver>
+                )}
+                <OnScreenControls
+                    onPushLeft={() => {
+                        playerMovement('LEFT');
+                    }}
+                    onPushRotate={() => {
+                        playerMovement('ROTATE');
+                    }}
+                    onPushRight={() => {
+                        playerMovement('RIGHT');
+                    }}
+                    onPushDown={() => {
+                        playerMovement('DOWN');
+                        playerMovement('UNPAUSE');
+                    }}
                 />
-            </StyledTetrisContainer>
+                <StyledTetrisContainer
+                    ref={gameRef}
+                    tilt={localSettings.tilt}
+                    gameOver={gameOver}
+                    role="button"
+                    tabIndex={0}
+                    onKeyUp={keyUp}
+                    onKeyDown={event => {
+                        move(event);
+                    }}
+                >
+                    <StyledDisplaysContainer>
+                        <Box>
+                            {!gameStarted ? (
+                                <Button
+                                    onClick={() => {
+                                        startGame();
+                                    }}
+                                >
+                                    Start
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={() => {
+                                        playerMovement('TOGGLE_PAUSE');
+                                    }}
+                                >
+                                    {gamePaused ? 'Continue' : 'Pause'}
+                                </Button>
+                            )}
+                            <Button
+                                onClick={() => {
+                                    if (!gamePaused) {
+                                        playerMovement('TOGGLE_PAUSE');
+                                    }
+                                    setShowSettings(true);
+                                }}
+                                style={{ marginLeft: '10px' }}
+                            >
+                                <Slider style={{ height: '30px' }} />
+                            </Button>
+                        </Box>
+                        <StyledDisplays>
+                            <Display>Score: {score}</Display>
+                            <Display>Rows: {rows}</Display>
+                            <Display>Level: {level}</Display>
+                        </StyledDisplays>
+                    </StyledDisplaysContainer>
+                    <Stage
+                        paused={gamePaused}
+                        stage={stage}
+                        showInstructions={!gameStarted}
+                        activeColumns={activeColumns}
+                    />
+                </StyledTetrisContainer>
+            </AppContainer>
         </ThemeProvider>
     );
 };
