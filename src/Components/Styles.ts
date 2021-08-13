@@ -2,6 +2,27 @@ import styled from 'styled-components';
 import { tetrisConfig } from '../Config/tetrisConfig';
 import Display from './Display';
 
+export const StyledSettingsContainer = styled.div`
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+`;
+
+export const StyledSettingsOverlay = styled.div`
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    color: #000;
+    display: flex;
+    flex-flow: column wrap;
+    font-family: 'Press Start 2P', cursive;
+    background: rgba(0, 0, 0, 0.6);
+`;
+
 export const StyledDisplaysContainer = styled.div`
     margin-right: 20px;
     display: flex;

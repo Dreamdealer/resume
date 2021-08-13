@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Stage from './Stage';
 import { usePlayer } from '../Hooks/usePlayer';
 import { useStage } from '../Hooks/useStage';
@@ -9,14 +9,25 @@ import Display from './Display';
 import { tetrisConfig } from '../Config/tetrisConfig';
 import Button from './Button';
 import GameOver from './GameOver';
-import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays, StyledSlider } from './Styles';
+import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays } from './Styles';
 import OnScreenControls from './OnScreenControls';
+import Settings from './Settings';
+import Box from './Box';
 
 type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 
+export type LocalSettingsType = {
+    tilt: number;
+    theme: 'light' | 'dark';
+};
+
 const Tetris = () => {
-    const [tilt, setTilt] = useState(0);
+    const [localSettings, setLocalSettings] = useState<LocalSettingsType>({
+        tilt: 0,
+        theme: 'light',
+    });
     const [dropTime, setDropTime] = useState<null | number>(null);
+    const [showSettings, setShowSettings] = useState(true);
     const [gameOver, setGameOver] = useState(false);
     const [gamePaused, setGamePaused] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
@@ -159,8 +170,28 @@ const Tetris = () => {
         moveTetrominoDown(1);
     }, dropTime);
 
+    useEffect(() => {
+        const localStorageSettings = localStorage.getItem('TetrisSettings');
+
+        if (localStorageSettings) {
+            setLocalSettings(JSON.parse(localStorageSettings));
+        }
+    }, []);
+
     return (
         <>
+            {showSettings && (
+                <Settings
+                    localSettings={localSettings}
+                    onLocalSettingsChange={settingsObject => {
+                        setLocalSettings(settingsObject);
+                        localStorage.setItem('TetrisSettings', JSON.stringify(settingsObject));
+                    }}
+                    onCloseSettings={() => {
+                        setShowSettings(false);
+                    }}
+                />
+            )}
             {gameOver && (
                 <GameOver>
                     <p>Game Over</p>
@@ -191,7 +222,7 @@ const Tetris = () => {
             />
             <StyledTetrisContainer
                 ref={gameRef}
-                tilt={tilt}
+                tilt={localSettings.tilt}
                 gameOver={gameOver}
                 role="button"
                 tabIndex={0}
@@ -201,40 +232,37 @@ const Tetris = () => {
                 }}
             >
                 <StyledDisplaysContainer>
-                    {!gameStarted ? (
+                    <Box>
+                        {!gameStarted ? (
+                            <Button
+                                onClick={() => {
+                                    startGame();
+                                }}
+                            >
+                                Start
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    playerMovement('TOGGLE_PAUSE');
+                                }}
+                            >
+                                {gamePaused ? 'Continue' : 'Pause'}
+                            </Button>
+                        )}
                         <Button
                             onClick={() => {
-                                startGame();
+                                setShowSettings(true);
                             }}
+                            style={{ marginLeft: '10px' }}
                         >
-                            Start Game
+                            <img src={`${process.env.PUBLIC_URL}/slider.svg`} alt="" height="30px" />
                         </Button>
-                    ) : (
-                        <Button
-                            onClick={() => {
-                                playerMovement('TOGGLE_PAUSE');
-                            }}
-                        >
-                            {gamePaused ? 'Continue...' : 'Pause Game'}
-                        </Button>
-                    )}
+                    </Box>
                     <StyledDisplays>
                         <Display>Score: {score}</Display>
                         <Display>Rows: {rows}</Display>
                         <Display>Level: {level}</Display>
-                        <Display>
-                            Tilt:
-                            <StyledSlider
-                                type="range"
-                                name="volume"
-                                value={tilt}
-                                min="0"
-                                max="45"
-                                onChange={({ target }) => {
-                                    setTilt(parseInt(target.value));
-                                }}
-                            />
-                        </Display>
                     </StyledDisplays>
                 </StyledDisplaysContainer>
                 <Stage
