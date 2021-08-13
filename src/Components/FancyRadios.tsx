@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 const StyledFancyRadiosContainer = styled.div`
-    border: 2px solid ${({ theme }) => theme.main.color};
+    border: ${({ theme }) => theme.main.borderWidth} solid ${({ theme }) => theme.main.borderColor};
     border-radius: 8px;
     display: flex;
     flex-flow: row nowrap;

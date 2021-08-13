@@ -21,7 +21,7 @@ export const StyledSettingsOverlay = styled.div`
     display: flex;
     flex-flow: column wrap;
     font-family: 'Press Start 2P', cursive;
-    background: rgba(0, 0, 0, 0.6);
+    background: ${({ theme }) => theme.modal.overlay}; ;
 `;
 
 export const StyledDisplaysContainer = styled.div`
@@ -117,7 +117,7 @@ export const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: numbe
             order: 2;
 
             ${StyledDisplays} {
-                border: 2px solid #000;
+                border: ${({ theme }) => theme.main.borderWidth} solid ${({ theme }) => theme.main.borderColor};
                 border-radius: 8px;
                 flex-flow: row wrap;
                 margin: 10px 0;

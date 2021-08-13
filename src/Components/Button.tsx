@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Button = styled.button`
     background: ${({ theme }) => theme.buttonsAndDisplays.background};
-    border: 2px solid ${({ theme }) => theme.buttonsAndDisplays.color};
+    border: ${({ theme }) => theme.main.borderWidth} solid ${({ theme }) => theme.main.borderColor};
     color: ${({ theme }) => theme.buttonsAndDisplays.color};
     font-size: ${({ theme }) => theme.main.fontSize};
     display: flex;

@@ -26,7 +26,7 @@ export const StyledStage = styled.div<{ showInstructions: boolean; paused: boole
     `}
 
     box-shadow: 0 0 0 1px ${({ theme }) => theme.stage.lines} inset;
-    border: 2px solid ${({ theme }) => theme.stage.lines};
+    border: ${({ theme }) => theme.main.borderWidth} solid ${({ theme }) => theme.main.borderColor};
     border-radius: 8px;
     position: relative;
 
