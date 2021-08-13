@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 const StyledFancyRadiosContainer = styled.div`
-    border: 2px solid #000;
+    border: 2px solid ${({ theme }) => theme.main.color};
     border-radius: 8px;
     display: flex;
     flex-flow: row nowrap;
@@ -18,7 +18,7 @@ const StyledLabel = styled.label<{ checked: boolean }>`
     flex-grow: 1;
     justify-content: center;
     padding: 20px;
-    color: ${({ checked }) => (checked ? '#F00' : '#000')};
+    color: ${({ checked, theme }) => (checked ? '#F00' : theme.main.color)};
 `;
 
 type PropsType = {

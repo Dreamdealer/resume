@@ -13,6 +13,9 @@ import { StyledTetrisContainer, StyledDisplaysContainer, StyledDisplays } from '
 import OnScreenControls from './OnScreenControls';
 import Settings from './Settings';
 import Box from './Box';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './Themes';
+import { ReactComponent as Slider } from '../Assets/slider.svg';
 
 type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 
@@ -27,7 +30,7 @@ const Tetris = () => {
         theme: 'light',
     });
     const [dropTime, setDropTime] = useState<null | number>(null);
-    const [showSettings, setShowSettings] = useState(true);
+    const [showSettings, setShowSettings] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [gamePaused, setGamePaused] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
@@ -179,7 +182,7 @@ const Tetris = () => {
     }, []);
 
     return (
-        <>
+        <ThemeProvider theme={localSettings.theme === 'light' ? lightTheme : darkTheme}>
             {showSettings && (
                 <Settings
                     localSettings={localSettings}
@@ -256,7 +259,7 @@ const Tetris = () => {
                             }}
                             style={{ marginLeft: '10px' }}
                         >
-                            <img src={`${process.env.PUBLIC_URL}/slider.svg`} alt="" height="30px" />
+                            <Slider style={{ height: '30px' }} />
                         </Button>
                     </Box>
                     <StyledDisplays>
@@ -272,7 +275,7 @@ const Tetris = () => {
                     activeColumns={activeColumns}
                 />
             </StyledTetrisContainer>
-        </>
+        </ThemeProvider>
     );
 };
 

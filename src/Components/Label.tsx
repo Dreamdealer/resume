@@ -7,7 +7,6 @@ const Label = styled.label<{ mt?: boolean }>`
     font-size: 20px;
     margin-bottom: 12px;
     margin-top: ${({ mt }) => (mt ? '30px' : '0')};
-    background: #fff;
     font-family: inherit;
 `;
 

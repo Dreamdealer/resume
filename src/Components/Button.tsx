@@ -1,18 +1,23 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
+    background: ${({ theme }) => theme.buttonsAndDisplays.background};
+    border: 2px solid ${({ theme }) => theme.buttonsAndDisplays.color};
+    color: ${({ theme }) => theme.buttonsAndDisplays.color};
+    font-size: ${({ theme }) => theme.main.fontSize};
     display: flex;
     flex-grow: 1;
     justify-content: center;
     align-items: center;
     outline: none;
-    border: 2px solid #000;
+    padding: 0 20px;
     border-radius: 8px;
-    line-height: 25px;
-    font-size: 20px;
-    padding: 20px;
-    background: #fff;
+    line-height: 50px;
     font-family: inherit;
+
+    .custom-fill {
+        fill: ${({ theme }) => theme.buttonsAndDisplays.color};
+    }
 
     &:hover {
         cursor: pointer;

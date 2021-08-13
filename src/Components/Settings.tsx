@@ -28,7 +28,7 @@ const Settings: FC<PropsType> = props => (
                     });
                 }}
             />
-            {/* <Label mt>Theme:</Label>
+            <Label mt>Theme:</Label>
             <FancyRadios
                 name="theme"
                 options={[
@@ -42,7 +42,7 @@ const Settings: FC<PropsType> = props => (
                         theme: selected as LocalSettingsType['theme'],
                     });
                 }}
-            /> */}
+            />
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
                 <Button
                     onClick={() => {

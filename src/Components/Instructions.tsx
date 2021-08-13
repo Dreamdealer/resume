@@ -10,7 +10,7 @@ const StyledInstructions = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #000;
+    color: ${({ theme }) => theme.modal.color};
     padding: 20px;
 `;
 

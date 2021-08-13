@@ -13,20 +13,20 @@ export const StyledStage = styled.div<{ showInstructions: boolean; paused: boole
     flex-flow: column nowrap;
     justify-content: flex-end;
     align-items: flex-end;
-    background: ${tetrisConfig.stage.backgroundColor};
+    background: ${({ theme }) => theme.stage.background};
 
-    ${({ showInstructions }) =>
+    ${({ showInstructions, theme }) =>
         !showInstructions &&
         `
-        background-image: linear-gradient(${tetrisConfig.stage.lineColor} 1px, transparent 1px),
-            linear-gradient(90deg, ${tetrisConfig.stage.lineColor} 1px, transparent 1px);
+        background-image: linear-gradient(${theme.stage.lines} 1px, transparent 1px),
+            linear-gradient(90deg, ${theme.stage.lines} 1px, transparent 1px);
         background-size: ${tetrisConfig.cell.size}px ${tetrisConfig.cell.size}px,
             ${tetrisConfig.cell.size}px ${tetrisConfig.cell.size}px;
         background-position: -1px -1px, -1px -1px;
     `}
 
-    box-shadow: 0 0 0 1px ${tetrisConfig.stage.lineColor} inset;
-    border: 2px solid #000;
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.stage.lines} inset;
+    border: 2px solid ${({ theme }) => theme.stage.lines};
     border-radius: 8px;
     position: relative;
 
@@ -45,7 +45,7 @@ const StyledPause = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #000;
+    color: ${({ theme }) => theme.modal.color};
     padding: 20px;
     font-size: 40px;
 `;
@@ -62,7 +62,7 @@ const StyledColumnGuide = styled.div<{ left: number; size: number; columnWidth: 
     width: ${({ size, columnWidth }) => `${size * columnWidth}px`};
     top: 0;
     bottom: 0;
-    background: ${tetrisConfig.stage.guideColor};
+    background: ${({ theme }) => theme.stage.guide};
 `;
 
 type PropsType = {

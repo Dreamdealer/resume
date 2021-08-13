@@ -3,12 +3,14 @@ import { tetrisConfig } from '../Config/tetrisConfig';
 import Display from './Display';
 
 export const StyledSettingsContainer = styled.div`
-    background: #fff;
+    background: ${({ theme }) => theme.modal.background};
+    color: ${({ theme }) => theme.modal.color};
     padding: 30px;
     border-radius: 8px;
 `;
 
 export const StyledSettingsOverlay = styled.div`
+    color: ${({ theme }) => theme.main.color};
     position: fixed;
     display: flex;
     width: 100%;
@@ -16,7 +18,6 @@ export const StyledSettingsOverlay = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 99;
-    color: #000;
     display: flex;
     flex-flow: column wrap;
     font-family: 'Press Start 2P', cursive;
@@ -64,8 +65,13 @@ export const StyledControl = styled.button`
 `;
 
 export const StyledTetrisContainer = styled.div<{ gameOver: boolean; tilt: number }>`
+    background: ${({ theme }) => theme.main.background};
     outline: none;
+    width: 100%;
     display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
     flex-flow: row nowrap;
     transform-style: preserve-3d;
     transform: rotateX(${({ tilt }) => `${tilt}deg`}) rotateY(0deg) translateZ(0px);
