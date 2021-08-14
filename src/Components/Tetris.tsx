@@ -14,8 +14,9 @@ import OnScreenControls from './OnScreenControls';
 import Settings from './Settings';
 import Box from './Box';
 import { ThemeProvider } from 'styled-components';
-import { lightTheme, darkTheme } from './Themes';
 import { ReactComponent as Slider } from '../Assets/slider.svg';
+import { lightTheme } from '../Themes/LightTheme';
+import { darkTheme } from '../Themes/DarkTheme';
 
 type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 

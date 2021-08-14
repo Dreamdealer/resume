@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { tetrisConfig } from '../Config/tetrisConfig';
+import { TetrominoKeyType } from '../Config/tetrominos';
 
 type PropsType = {
-    color: string;
+    tetrominoType: TetrominoKeyType;
 };
 
 const handleFaceTransform = (face: string) => {
@@ -48,11 +49,11 @@ export const StyledCube = styled.div<{ transparent?: boolean }>`
     `}
 `;
 
-export const StyledCubeFace = styled.div<{ face: string; color: string }>`
+export const StyledCubeFace = styled.div<{ face: string; tetrominoType: string }>`
     position: absolute;
     width: ${tetrisConfig.cell.size - tetrisConfig.cell.spacing * 2}px;
     height: ${tetrisConfig.cell.size - tetrisConfig.cell.spacing * 2}px;
-    background: ${({ color }) => color};
+    background: ${({ tetrominoType, theme }) => theme.tetrominos[tetrominoType].color};
     line-height: ${tetrisConfig.cell.size}px;
     font-size: 40px;
     font-weight: bold;
@@ -64,18 +65,18 @@ export const StyledCubeFace = styled.div<{ face: string; color: string }>`
 `;
 
 const Cell: FC<PropsType> = props => {
-    if (props.color === 'transparent') {
+    if (props.tetrominoType === 0) {
         return <StyledCube transparent />;
     }
 
     return (
         <StyledCube>
-            <StyledCubeFace face="front" color={props.color} />
-            <StyledCubeFace face="back" color={props.color} />
-            <StyledCubeFace face="right" color={props.color} />
-            <StyledCubeFace face="left" color={props.color} />
-            <StyledCubeFace face="top" color={props.color} />
-            <StyledCubeFace face="bottom" color={props.color} />
+            <StyledCubeFace face="front" tetrominoType={props.tetrominoType} />
+            <StyledCubeFace face="back" tetrominoType={props.tetrominoType} />
+            <StyledCubeFace face="right" tetrominoType={props.tetrominoType} />
+            <StyledCubeFace face="left" tetrominoType={props.tetrominoType} />
+            <StyledCubeFace face="top" tetrominoType={props.tetrominoType} />
+            <StyledCubeFace face="bottom" tetrominoType={props.tetrominoType} />
         </StyledCube>
     );
 };

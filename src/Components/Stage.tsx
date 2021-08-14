@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { tetrisConfig } from '../Config/tetrisConfig';
-import { TETROMINOS, TetrominosType } from '../Config/tetrominos';
 import { StageType } from '../gameHelpers';
 import Cell, { StyledCube } from './Cell';
 import Instructions from './Instructions';
@@ -86,12 +85,7 @@ const Stage: FC<PropsType> = props => {
             {props.stage.map((row: Array<Array<any>>, rowIndex: number) => (
                 <StyledRow key={rowIndex}>
                     {row.map(([type, state], index: number) => {
-                        return (
-                            <Cell
-                                key={rowIndex + index}
-                                color={type === 0 ? 'transparent' : TETROMINOS[type as keyof TetrominosType].color}
-                            />
-                        );
+                        return <Cell key={rowIndex + index} tetrominoType={type} />;
                     })}
                 </StyledRow>
             ))}
