@@ -76,12 +76,12 @@ const Tetris = () => {
         }
 
         // debug collision detection
-        //console.log(`want to move to: ${y}, canMove to ${canMoveTo}, collidesAt ${collideAt}.`);
+        //console.log(`want to move to: ${y}, canMove to ${canMoveTo}, player Y: ${player.pos.y}`);
 
         if (canMoveTo === y) {
             updatePlayerPosition({ x: 0, y: y, collided: false });
         } else {
-            if (player.pos.y < 1) {
+            if (player.pos.y < 1 && canMoveTo < 1) {
                 setGameStarted(false);
                 setGameOver(true);
                 setDropTime(null);
