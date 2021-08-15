@@ -84,7 +84,7 @@ const Stage: FC<PropsType> = props => {
             )}
             {props.stage.map((row: Array<Array<any>>, rowIndex: number) => (
                 <StyledRow key={rowIndex}>
-                    {row.map(([type, state], index: number) => {
+                    {row.map(([type], index: number) => {
                         return <Cell key={rowIndex + index} tetrominoType={type} />;
                     })}
                 </StyledRow>

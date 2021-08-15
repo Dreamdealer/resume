@@ -10,6 +10,7 @@ export const lightTheme: ThemeType = {
         S: { color: '#cd94ff' },
         T: { color: '#8aedeb' },
         Z: { color: '#dea6ec' },
+        '?': { color: '#ece7a6' },
     },
     main: {
         background: 'linear-gradient(to top, #ffefba, #ffffff)',

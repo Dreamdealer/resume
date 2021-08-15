@@ -17,6 +17,8 @@ import { ThemeProvider } from 'styled-components';
 import { ReactComponent as Slider } from '../Assets/slider.svg';
 import { lightTheme } from '../Themes/LightTheme';
 import { darkTheme } from '../Themes/DarkTheme';
+import SingleTetromino from './SingleTetromino';
+import { PauseTetromino as pauseTetrominoShape } from '../Config/tetrominos';
 
 type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 
@@ -35,7 +37,7 @@ const Tetris = () => {
     const [gameOver, setGameOver] = useState(false);
     const [gamePaused, setGamePaused] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
-    const [player, updatePlayerPosition, resetPlayer, playerRotate] = usePlayer();
+    const [player, updatePlayerPosition, resetPlayer, playerRotate, nextTetromino] = usePlayer();
     const [stage, setStage, rowsCleared, activeColumns] = useStage(player, resetPlayer);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
     const gameRef = useRef<HTMLDivElement>(null);
@@ -271,6 +273,10 @@ const Tetris = () => {
                             <Display>Score: {score}</Display>
                             <Display>Rows: {rows}</Display>
                             <Display>Level: {level}</Display>
+                            <Display>
+                                <Box>Next:</Box>
+                                <SingleTetromino shape={gamePaused ? pauseTetrominoShape : nextTetromino.preview} />
+                            </Display>
                         </StyledDisplays>
                     </StyledDisplaysContainer>
                     <Stage

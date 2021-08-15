@@ -27,6 +27,7 @@ const playerStartingState: PlayerStateType = {
 
 export const usePlayer = () => {
     const [player, setPlayer] = useState(playerStartingState);
+    const [nextTetromino, setNextTetromino] = useState(randomTetromino());
 
     const rotate = (matrix: TetrominoShapeType, direction: number) => {
         const rotatedTetromino = matrix.map((_, index) => matrix.map(col => col[index]));
@@ -71,10 +72,12 @@ export const usePlayer = () => {
                 x: tetrisConfig.stage.width / 2 - 2,
                 y: 0,
             },
-            tetromino: randomTetromino().shape,
+            tetromino: nextTetromino.shape,
             collided: false,
         });
-    }, []);
 
-    return [player, updatePlayerPosition, resetPlayer, playerRotate] as const;
+        setNextTetromino(randomTetromino());
+    }, [nextTetromino]);
+
+    return [player, updatePlayerPosition, resetPlayer, playerRotate, nextTetromino] as const;
 };

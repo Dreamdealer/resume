@@ -13,6 +13,7 @@ const Display = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-flow: column;
 `;
 
 export default Display;

@@ -2,7 +2,7 @@ import { TetrominoKeyType } from '../Config/tetrominos';
 
 export type ThemeType = {
     tetrominos: {
-        [key in TetrominoKeyType]: {
+        [key in TetrominoKeyType & '?']: {
             color: string;
         };
     };
