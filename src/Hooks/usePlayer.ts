@@ -79,5 +79,11 @@ export const usePlayer = () => {
         setNextTetromino(randomTetromino());
     }, [nextTetromino]);
 
-    return [player, updatePlayerPosition, resetPlayer, playerRotate, nextTetromino] as const;
+    return {
+        player,
+        updatePlayerPosition,
+        resetPlayer,
+        playerRotate,
+        nextTetromino,
+    } as const;
 };

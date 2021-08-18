@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { tetrisConfig } from '../Config/tetrisConfig';
 import Display from './Display';
 
-export const StyledSettingsContainer = styled.div`
+export const StyledModalContainer = styled.div`
     background: ${({ theme }) => theme.modal.background};
     color: ${({ theme }) => theme.modal.color};
     padding: 30px;

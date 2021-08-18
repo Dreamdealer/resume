@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Button from './Button';
 import FancyRadios from './FancyRadios';
 import Label from './Label';
-import { StyledSettingsContainer, StyledSettingsOverlay, StyledSlider } from './Styles';
+import { StyledModalContainer, StyledSettingsOverlay, StyledSlider } from './Styles';
 import { LocalSettingsType } from './Tetris';
 
 type PropsType = {
@@ -13,7 +13,7 @@ type PropsType = {
 
 const Settings: FC<PropsType> = props => (
     <StyledSettingsOverlay>
-        <StyledSettingsContainer>
+        <StyledModalContainer>
             <Label>Tilt:</Label>
             <StyledSlider
                 type="range"
@@ -52,7 +52,7 @@ const Settings: FC<PropsType> = props => (
                     Close
                 </Button>
             </div>
-        </StyledSettingsContainer>
+        </StyledModalContainer>
     </StyledSettingsOverlay>
 );
 

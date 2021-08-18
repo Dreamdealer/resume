@@ -19,6 +19,7 @@ import { lightTheme } from '../Themes/LightTheme';
 import { darkTheme } from '../Themes/DarkTheme';
 import SingleTetromino from './SingleTetromino';
 import { PauseTetromino as pauseTetrominoShape } from '../Config/tetrominos';
+import Highscores, { HighscoreType } from './Highscores';
 
 type PlayerMovementType = 'LEFT' | 'RIGHT' | 'ROTATE' | 'DOWN' | 'FULLDOWN' | 'TOGGLE_PAUSE' | 'UNPAUSE';
 
@@ -30,16 +31,17 @@ export type LocalSettingsType = {
 const Tetris = () => {
     const [localSettings, setLocalSettings] = useState<LocalSettingsType>({
         tilt: 0,
-        theme: 'light',
+        theme: 'dark',
     });
     const [dropTime, setDropTime] = useState<null | number>(null);
     const [showSettings, setShowSettings] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [gamePaused, setGamePaused] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
-    const [player, updatePlayerPosition, resetPlayer, playerRotate, nextTetromino] = usePlayer();
+    const { player, updatePlayerPosition, resetPlayer, playerRotate, nextTetromino } = usePlayer();
     const [stage, setStage, rowsCleared, activeColumns] = useStage(player, resetPlayer);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
+    const [highscores, setHighscores] = useState<HighscoreType[]>([]);
     const gameRef = useRef<HTMLDivElement>(null);
 
     const movePlayer = (dir: number) => {
@@ -178,11 +180,16 @@ const Tetris = () => {
 
     useEffect(() => {
         const localStorageSettings = localStorage.getItem('TetrisSettings');
+        const savedHighscores = localStorage.getItem('TetrisHighscores');
 
         if (localStorageSettings) {
             setLocalSettings(JSON.parse(localStorageSettings));
         }
-    }, []);
+
+        if (savedHighscores) {
+            setHighscores(JSON.parse(savedHighscores));
+        }
+    }, [setHighscores]);
 
     return (
         <ThemeProvider theme={localSettings.theme === 'light' ? lightTheme : darkTheme}>
@@ -200,17 +207,19 @@ const Tetris = () => {
                     />
                 )}
                 {gameOver && (
-                    <GameOver>
-                        <p>Game Over</p>
-                        <Button
-                            onClick={() => {
-                                startGame();
-                                gameRef?.current?.focus();
-                            }}
-                        >
-                            Restart Game
-                        </Button>
-                    </GameOver>
+                    <GameOver
+                        score={score}
+                        onClose={() => {
+                            startGame();
+                            gameRef?.current?.focus();
+                        }}
+                        onSaveHighscore={(highscore: HighscoreType) => {
+                            const newHighscores: HighscoreType[] = [...highscores, highscore];
+
+                            setHighscores(newHighscores);
+                            localStorage.setItem('TetrisHighscores', JSON.stringify(newHighscores));
+                        }}
+                    />
                 )}
                 <OnScreenControls
                     onPushLeft={() => {
@@ -273,6 +282,10 @@ const Tetris = () => {
                             <Display>Score: {score}</Display>
                             <Display>Rows: {rows}</Display>
                             <Display>Level: {level}</Display>
+                            <Display>
+                                <Box>Scores:</Box>
+                                <Highscores highscores={highscores} />
+                            </Display>
                             <Display>
                                 <Box>Next:</Box>
                                 <SingleTetromino shape={gamePaused ? pauseTetrominoShape : nextTetromino.preview} />
