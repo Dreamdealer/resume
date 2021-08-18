@@ -12,12 +12,9 @@ export type TetrominosType = {
 };
 
 export const PauseTetromino: TetrominoShapeType = [
+    ['?', 0, '?'],
     [0, '?', 0],
     ['?', 0, '?'],
-    [0, 0, '?'],
-    [0, '?', 0],
-    [0, 0, 0],
-    [0, '?', 0],
 ];
 
 export const TETROMINOS: TetrominosType = {
