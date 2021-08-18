@@ -3,7 +3,7 @@ import Button from './Button';
 import FancyRadios from './FancyRadios';
 import Label from './Label';
 import { StyledModalContainer, StyledSettingsOverlay, StyledSlider } from './Styles';
-import { LocalSettingsType } from './Tetris';
+import { LocalSettingsType } from '../Tetris';
 
 type PropsType = {
     localSettings: LocalSettingsType;
