@@ -1,4 +1,4 @@
 import ReactDOM from 'react-dom';
-import Tetris from './Tetris/Tetris';
+import Homepage from './Homepage/Homepage';
 
-ReactDOM.render(<Tetris />, document.getElementById('tetris'));
+ReactDOM.render(<Homepage />, document.getElementById('app'));
