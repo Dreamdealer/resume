@@ -44,7 +44,6 @@ export const StyledContainer = styled.div<{ selectedBackground: string }>`
 
     > p {
         max-width: 540px;
-        padding: 20px;
     }
 
     a {
