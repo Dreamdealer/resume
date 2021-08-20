@@ -18,6 +18,7 @@ type PropsType = {
 const Settings: FC<PropsType> = props => (
     <StyledSettingsOverlay>
         <StyledModalContainer>
+            <label>Background color:</label>
             <StyledSwatchContainer>
                 {Object.entries(backgroundGradients).map(([key, gradient]) => (
                     <StyledGradientSwatch

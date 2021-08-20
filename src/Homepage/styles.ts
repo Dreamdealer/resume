@@ -16,6 +16,7 @@ export const StyledSwatchContainer = styled.div`
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;
+    margin: 20px 0%;
 `;
 
 export const StyledGradientSwatch = styled.div<{ gradient: string[] }>`
@@ -139,6 +140,5 @@ export const StyledSettingsOverlay = styled.div`
     z-index: 99;
     display: flex;
     flex-flow: column wrap;
-    font-family: 'Press Start 2P', cursive;
     background: rgba(0, 0, 0, 0.6);
 `;
