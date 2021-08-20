@@ -41,6 +41,8 @@ export const StyledContainer = styled.div<{ selectedBackground: string }>`
     font-family: 'Asap', sans-serif;
     color: #fff;
     line-height: 1.5em;
+    padding: 20px;
+    box-sizing: border-box;
 
     > p {
         max-width: 540px;
@@ -87,7 +89,7 @@ export const StyledNav = styled.nav`
     align-items: stretch;
     max-width: 100%;
     width: 580px;
-    box-sizing: content-box;
+    margin: 10px 0;
 
     a {
         box-sizing: border-box;
