@@ -10,7 +10,8 @@ const Navigation = () => (
             </p>
         </StyledLink>
         <StyledLink to="/" disabled>
-            <strong>Breakout (soon...)</strong>
+            {/* <StyledLink to="/breakout"> */}
+            <strong>Breakout (WIP)</strong>
             <p>This project uses: React, Custom hooks, RequestAnimationFrame, Theming, Styled Components, etc.</p>
         </StyledLink>
     </StyledNav>
