@@ -1,0 +1,15 @@
+[core]
+	editor = code --wait
+[alias]
+	amend = commit --amend --no-edit
+	fuckit = reset --hard
+	commit = "!commit() { git commit -am $1 }; commit"
+	co = checkout
+	editconfig = config --global -e
+	at = !git checkout at && git pull
+	del = branch -D
+	listbranches = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+	create = "!f(){ b=$1; git checkout at; git pull; git checkout -b "$b" at; };f"
+	publish = "!git push -u origin $(git current-branch)"
+[push]
+	default = current
