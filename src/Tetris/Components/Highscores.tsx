@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Box from './Box';
 
 export type HighscoreType = {
@@ -32,8 +32,8 @@ const SingleTetromino: FC<PropsType> = props => {
 
     return (
         <Box direction="column" grow={1} width="100%">
-            {populatedHighscores.slice(0, 3).map((player: HighscoreType) => (
-                <Box grow={1} justifyContent="space-between">
+            {populatedHighscores.slice(0, 3).map((player: HighscoreType, index: number) => (
+                <Box key={index} grow={1} justifyContent="space-between">
                     <Box>{player.name.toUpperCase()}</Box>
                     <Box>{player.score}</Box>
                 </Box>

@@ -9,10 +9,12 @@ const Navigation = () => (
                 LocalStorage
             </p>
         </StyledLink>
-        <StyledLink to="/" disabled>
-            {/* <StyledLink to="/breakout"> */}
-            <strong>Breakout (WIP)</strong>
-            <p>This project uses: React, Custom hooks, RequestAnimationFrame, Theming, Styled Components, etc.</p>
+        <StyledLink to="/clever">
+            <strong>Clever</strong>
+            <p>
+                This project uses: React, Custom hooks, Typescript, Styled Components, Theming &amp;
+                LocalStorage
+            </p>
         </StyledLink>
     </StyledNav>
 );
