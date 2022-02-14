@@ -1,43 +1,92 @@
 import { FC } from 'react';
-import styled from 'styled-components';
+import { ModifiersType } from '../Types';
 import ScoreField from './ScoreField';
+import styled from 'styled-components';
+import { PlusOne } from './Extras/PlusOne';
 
-const GreenField: FC = () => {
+type PropsType = {
+    scores: number[];
+};
+
+const modifiers: ModifiersType[] = [
+    {
+        fieldIndex: 1,
+        placeholder: '⪭ 1',
+        points: 1,
+    },
+    {
+        fieldIndex: 2,
+        placeholder: '⪭ 2',
+        points: 3,
+    },
+    {
+        fieldIndex: 3,
+        placeholder: '⪭ 3',
+        points: 6,
+    },
+    {
+        fieldIndex: 4,
+        placeholder: '⪭ 4',
+        points: 10,
+        symbol: <PlusOne />,
+        modifier: (score: number) => score * 2,
+    },
+    {
+        fieldIndex: 5,
+        placeholder: '⪭ 5',
+        points: 15,
+    },
+    {
+        fieldIndex: 6,
+        placeholder: '⪭ 1',
+        points: 21,
+        modifier: (score: number) => {
+            console.log('add a blue cross');
+            return score;
+        },
+    },
+    {
+        fieldIndex: 7,
+        placeholder: '⪭ 2',
+        points: 28,
+    },
+    {
+        fieldIndex: 8,
+        placeholder: '⪭ 3',
+        points: 36,
+    },
+    {
+        fieldIndex: 9,
+        placeholder: '⪭ 4',
+        points: 45,
+    },
+    {
+        fieldIndex: 10,
+        placeholder: '⪭ 5',
+        points: 55,
+    },
+    {
+        fieldIndex: 11,
+        placeholder: '⪭ 6',
+        points: 66,
+    },
+];
+
+const GreenField: FC<PropsType> = ({ scores }) => {
+    const scoreFields = [...scores, ...Array(11 - scores.length).fill(null)];
+
     return (
         <StyledGreenField>
-            <ScoreField symbol>1</ScoreField>
-            <ScoreField symbol>3</ScoreField>
-            <ScoreField symbol>6</ScoreField>
-            <ScoreField symbol>10</ScoreField>
-            <ScoreField symbol>15</ScoreField>
-            <ScoreField symbol>21</ScoreField>
-            <ScoreField symbol>28</ScoreField>
-            <ScoreField symbol>36</ScoreField>
-            <ScoreField symbol>45</ScoreField>
-            <ScoreField symbol>55</ScoreField>
-            <ScoreField symbol>66</ScoreField>
-            <ScoreField checked>≥1</ScoreField>
-            <ScoreField checked>≥2</ScoreField>
-            <ScoreField checked>≥3</ScoreField>
-            <ScoreField>≥4</ScoreField>
-            <ScoreField>≥5</ScoreField>
-            <ScoreField>≥1</ScoreField>
-            <ScoreField>≥2</ScoreField>
-            <ScoreField>≥3</ScoreField>
-            <ScoreField>≥4</ScoreField>
-            <ScoreField>≥5</ScoreField>
-            <ScoreField>≥6</ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol>+1</ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol>🟦</ScoreField>
-            <ScoreField symbol>🦊</ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol>🟪</ScoreField>
-            <ScoreField symbol>♻️</ScoreField>
-            <ScoreField symbol></ScoreField>
+            {scoreFields.map((score, index) => {
+                return (
+                    <ScoreField
+                        key={index}
+                        score={score}
+                        color="green"
+                        modifier={modifiers.filter(m => m.fieldIndex === index + 1)[0]}
+                    />
+                );
+            })}
         </StyledGreenField>
     );
 };
@@ -46,13 +95,10 @@ export default GreenField;
 
 const StyledGreenField = styled.div`
     width: 100%;
-    display: grid; 
-    grid-auto-columns: 1fr; 
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
-    grid-template-rows: 1.5em 3em 1em; 
-    gap: 0 .7em; 
-    grid-template-areas: 
-        ". . . . . . . . . . ."
-        ". . . . . . . . . . ."
-        ". . . . . . . . . . ."; 
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 3.5em;
+    gap: 0 1.6%;
+    grid-template-areas: '. . . . . . . . . . .';
 `;

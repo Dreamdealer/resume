@@ -4,56 +4,61 @@ import styled from 'styled-components';
 type PropsType = {
     state: string;
     index: number;
-}
+};
 
-const Dice: FC<PropsType> = props => {
-    const getTurnTypeSymbol = (index:number) => {
-        switch(index) {
-            case 1: 
+const Turn: FC<PropsType> = props => {
+    const getTurnTypeSymbol = (index: number) => {
+        switch (index) {
+            case 1:
             case 3:
-                return '♻️'; break;
-            case 2: 
-                return '➕'; break;
-            case 4: 
-                return '❌|6️⃣'; break;
-            case 5: 
-                return '👤👤👤'; break;
-            case 6: 
-                return '👤|👤👤'; break;
+                return '♻️';
+                break;
+            case 2:
+                return '➕';
+                break;
+            case 4:
+                return '❌|6️⃣';
+                break;
+            case 5:
+                return '👤👤👤';
+                break;
+            case 6:
+                return '👤|👤👤';
+                break;
         }
-    }
+    };
 
     return (
         <StyledTurn>
             <StyledNumber state={props.state}>{props.index}</StyledNumber>
-            <StyledTurnType>
-                {getTurnTypeSymbol(props.index)}
-            </StyledTurnType>
+            <StyledTurnType>{getTurnTypeSymbol(props.index)}</StyledTurnType>
         </StyledTurn>
     );
 };
 
-export default Dice;
+export default Turn;
 
 const StyledTurn = styled.div`
     width: 100%;
     height: 100%;
-    font-size: 1.5em;
+    font-size: 1.3em;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-`;
-    
-const StyledNumber = styled.div<{ state?: string}>`
-    display: flex;
-    background: #FFF;
-    border: 4px solid ${({state}) => state === 'ACTIVE' ? '#F00' : '#FFF'};
+    background: #fff;
     border-radius: 5px;
+`;
+
+const StyledNumber = styled.div<{ state?: string }>`
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    position: relative;
 
-    ${({state}) => state !== 'OPEN' && `
+    ${({ state }) =>
+        state !== 'OPEN' &&
+        `
         &:after { 
             content: 'X';
             font-size: 1.5em;
@@ -69,10 +74,8 @@ const StyledNumber = styled.div<{ state?: string}>`
 
 const StyledTurnType = styled.div`
     display: flex;
-    border-radius: 3px;
     justify-content: center;
     align-items: center;
     white-space: nowrap;
-    font-size: .5em;
-    margin-top: 5px;
+    font-size: 0.6em;
 `;

@@ -1,32 +1,21 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import styled from 'styled-components';
+import { CounterContext } from '../Hooks/useGameContext';
 import ScoreField from './ScoreField';
 
-const PurpleField: FC = () => {
+type PropsType = {
+    scores: number[];
+};
+
+const PurpleField: FC<PropsType> = ({ scores }) => {
+    const scoreFields = [...scores, ...Array(11 - scores.length).fill(null)];
+    const { scoreModifiers } = useContext(CounterContext);
+
     return (
         <StyledPurpleField>
-            <ScoreField score={4} rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField rightSymbol="<"></ScoreField>
-            <ScoreField></ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol></ScoreField>
-            <ScoreField symbol>♻️</ScoreField>
-            <ScoreField symbol>🟦</ScoreField>
-            <ScoreField symbol>+1</ScoreField>
-            <ScoreField symbol>🟨</ScoreField>
-            <ScoreField symbol>🦊</ScoreField>
-            <ScoreField symbol>♻️</ScoreField>
-            <ScoreField symbol>🟩</ScoreField>
-            <ScoreField symbol>🟧</ScoreField>
-            <ScoreField symbol>+1</ScoreField>
+            {scoreFields.map((score, index) => {
+                return <ScoreField key={index} score={score} modifier={scoreModifiers.purple[index + 1]} />;
+            })}
         </StyledPurpleField>
     );
 };
@@ -35,14 +24,11 @@ export default PurpleField;
 
 const StyledPurpleField = styled.div`
     width: 100%;
-    display: grid; 
-    color: inherit;
-    grid-auto-columns: 1fr; 
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
-    grid-template-rows: 3em 1em;  
-    gap: 0 .7em; 
-    grid-template-areas: 
-        ". . . . . . . . . . ."
-        ". . . . . . . . . . .";
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0 1.6%;
+    grid-template-areas: '. . . . . . . . . . .';
+    align-items: center;
 `;
-
