@@ -1,37 +1,35 @@
-import { FC, useEffect } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 import { ModifiersType } from '../Types';
-import { CleverColors } from '../values';
 import styled from 'styled-components';
 import { Points } from './Extras/Points';
+import { CounterContext } from '../Hooks/useGameContext';
 
 type PropsType = {
     score?: number;
-    modifier?: ModifiersType;
-    checked?: boolean;
-    color?: string;
+    modifier?: ModifiersType; // deprecate
+    points?: number;
+    highlighted?: boolean;
+    color: string;
+    placeholder?: string;
+    index?: number;
+    symbol?: ReactNode;
 };
 
-const ScoreField: FC<PropsType> = props => {
-    const score = (props.color === 'yellow' || props.color === 'blue') && props.score ? 'X' : props.score;
+const ScoreField: FC<PropsType> = ({ color, score, placeholder, highlighted, symbol, points }) => {
+    const { clickToSelectScore } = useContext(CounterContext);
 
-    const placeholder =
-        props.color === 'yellow' && props.modifier && props.modifier.placeholder !== 'X'
-            ? parseInt(props.modifier.placeholder ? props.modifier.placeholder : '').toString()
-            : props.modifier?.placeholder;
+    const moddedScore = (color === 'yellow' || color === 'blue' || color === 'green') && score ? 'X' : score;
 
-    // useEffect(() => {
-    //     if (props.score && props.modifier?.modifier) {
-    //         props.modifier?.modifier(props.score);
-    //     }
-    // }, []);
+    const moddedPlaceholder =
+        color === 'yellow' && placeholder?.toUpperCase() !== 'X'
+            ? parseInt(placeholder ? placeholder : '').toString()
+            : placeholder;
 
     return (
-        <StyledScoreField>
-            {props.modifier?.points && props.color && <Points points={props.modifier.points} color={props.color} />}
-            <StyledScoreBox score={score} placeholder={placeholder} />
-            {props.color !== 'yellow' && props.color !== 'blue' && (
-                <StyledSymbol>{props.modifier?.symbol}</StyledSymbol>
-            )}
+        <StyledScoreField onClick={() => clickToSelectScore(color, placeholder)}>
+            {points && <Points points={points} color={color} />}
+            <StyledScoreBox score={moddedScore} placeholder={moddedPlaceholder} highlighted={highlighted} />
+            {color !== 'yellow' && color !== 'blue' && <StyledSymbol>{symbol}</StyledSymbol>}
         </StyledScoreField>
     );
 };
@@ -57,7 +55,7 @@ const StyledScoreField = styled.div`
     }
 `;
 
-const StyledScoreBox = styled.div<{ score?: number | string; placeholder?: string }>`
+const StyledScoreBox = styled.div<{ score?: number | string; placeholder?: string; highlighted?: boolean }>`
     background: #fff;
     border-radius: 5px;
     font-size: 1.3rem;
@@ -67,6 +65,19 @@ const StyledScoreBox = styled.div<{ score?: number | string; placeholder?: strin
     flex-grow: 1;
     width: 2em;
     height: 2em;
+
+    // highlight field
+    ${({ highlighted }) =>
+        highlighted &&
+        `
+        box-shadow: 
+            0 0 0 3px #C00 inset,
+            0 0 0 3px #C00,
+            0 0 0.8em #F00
+        ;
+        color: #F00;
+        cursor: pointer;
+    `}
 
     ${({ score }) =>
         score &&
@@ -97,7 +108,6 @@ const StyledScoreBox = styled.div<{ score?: number | string; placeholder?: strin
             justify-content: center;
             align-items: center;
             opacity: 0.7;
-            letter-spacing: -0.1em;
     }`};
 `;
 

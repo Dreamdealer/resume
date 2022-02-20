@@ -1,69 +1,19 @@
-import { FC } from 'react';
-import styled from 'styled-components';
-import { ModifiersType } from '../Types';
+import { FC, useContext } from 'react';
+import { CounterContext } from '../Hooks/useGameContext';
 import { BlueCross } from './Extras/BlueCross';
 import { Fox } from './Extras/Fox';
 import { GreenCross } from './Extras/GreenCross';
 import { OrangeScore } from './Extras/OrangeScore';
 import { PlusOne } from './Extras/PlusOne';
-import { Points } from './Extras/Points';
 import { PurpleScore } from './Extras/PurpleScore';
 import { Rethrow } from './Extras/Rethrow';
 import { YellowCross } from './Extras/YellowCross';
 import ScoreField from './ScoreField';
+import styled from 'styled-components';
 
-type PropsType = {
-    scores: number[];
-};
+const BlueField: FC = () => {
+    const { scoreBoard } = useContext(CounterContext);
 
-const modifiers: ModifiersType[] = [
-    {
-        fieldIndex: 1,
-        placeholder: '2',
-    },
-    {
-        fieldIndex: 2,
-        placeholder: '3',
-    },
-    {
-        fieldIndex: 3,
-        placeholder: '4',
-    },
-    {
-        fieldIndex: 5,
-        placeholder: '5',
-    },
-    {
-        fieldIndex: 6,
-        placeholder: '6',
-    },
-    {
-        fieldIndex: 7,
-        placeholder: '7',
-    },
-    {
-        fieldIndex: 8,
-        placeholder: '8',
-    },
-    {
-        fieldIndex: 10,
-        placeholder: '9',
-    },
-    {
-        fieldIndex: 11,
-        placeholder: '10',
-    },
-    {
-        fieldIndex: 12,
-        placeholder: '11',
-    },
-    {
-        fieldIndex: 13,
-        placeholder: '12',
-    },
-];
-
-const BlueField: FC<PropsType> = ({ scores }) => {
     return (
         <StyledBlueField>
             <BlueCross key="0blue" />
@@ -85,14 +35,22 @@ const BlueField: FC<PropsType> = ({ scores }) => {
                         return <PlusOne key={index} />;
                 }
 
-                const modifier = modifiers.filter(m => m.fieldIndex === index + 1)[0];
-                const score = modifier.placeholder
-                    ? scores.includes(parseInt(modifier.placeholder))
-                        ? modifier.placeholder
-                        : '0'
-                    : '0';
+                const scoreBoardField = scoreBoard.blue[index + 1];
 
-                return <ScoreField key={`${index}blue`} score={parseInt(score)} modifier={modifier} color="blue" />;
+                if (!scoreBoardField) return;
+
+                return (
+                    <ScoreField
+                        key={index}
+                        index={index}
+                        color={'yellow'}
+                        score={scoreBoardField.score ?? 0}
+                        points={scoreBoardField.points}
+                        symbol={scoreBoardField.symbol}
+                        placeholder={scoreBoardField.placeholder}
+                        highlighted={scoreBoardField.highlighted}
+                    />
+                );
             })}
         </StyledBlueField>
     );

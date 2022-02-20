@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import styled from 'styled-components';
+import { CounterContext } from '../Hooks/useGameContext';
 import { ModifiersType } from '../Types';
 import { BlueCross } from './Extras/BlueCross';
 import { Fox } from './Extras/Fox';
@@ -9,78 +10,9 @@ import { PlusOne } from './Extras/PlusOne';
 import { Points } from './Extras/Points';
 import ScoreField from './ScoreField';
 
-type PropsType = {
-    scores: number[];
-};
+const YellowField: FC = () => {
+    const { scoreBoard } = useContext(CounterContext);
 
-const modifiers: ModifiersType[] = [
-    {
-        fieldIndex: 1,
-        placeholder: '3.1',
-    },
-    {
-        fieldIndex: 2,
-        placeholder: '6.1',
-    },
-    {
-        fieldIndex: 3,
-        placeholder: '5.1',
-    },
-    {
-        fieldIndex: 4,
-        placeholder: 'X',
-    },
-    {
-        fieldIndex: 6,
-        placeholder: '2.1',
-    },
-    {
-        fieldIndex: 7,
-        placeholder: '1.1',
-    },
-    {
-        fieldIndex: 8,
-        placeholder: 'X',
-    },
-    {
-        fieldIndex: 9,
-        placeholder: '5.2',
-    },
-    {
-        fieldIndex: 11,
-        placeholder: '1.2',
-    },
-    {
-        fieldIndex: 12,
-        placeholder: 'X',
-    },
-    {
-        fieldIndex: 13,
-        placeholder: '2.2',
-    },
-    {
-        fieldIndex: 14,
-        placeholder: '4.2',
-    },
-    {
-        fieldIndex: 16,
-        placeholder: 'X',
-    },
-    {
-        fieldIndex: 17,
-        placeholder: '3.2',
-    },
-    {
-        fieldIndex: 18,
-        placeholder: '4.2',
-    },
-    {
-        fieldIndex: 19,
-        placeholder: '6',
-    },
-];
-
-const YellowField: FC<PropsType> = ({ scores }) => {
     return (
         <StyledYellowField>
             {[...Array(25)].map((_, index) => {
@@ -105,19 +37,20 @@ const YellowField: FC<PropsType> = ({ scores }) => {
                         return <PlusOne key={index} />;
                 }
 
-                const modifier = modifiers.filter(m => m.fieldIndex === index + 1)[0];
-                const score = modifier.placeholder
-                    ? scores.includes(parseFloat(modifier.placeholder))
-                        ? parseFloat(modifier.placeholder)
-                        : 0
-                    : 0;
+                const scoreBoardField = scoreBoard.yellow[index + 1];
+
+                if (!scoreBoardField) return;
 
                 return (
                     <ScoreField
-                        key={`${index}`}
-                        score={score}
-                        modifier={modifiers.filter(m => m.fieldIndex === index + 1)[0]}
-                        color="yellow"
+                        key={index}
+                        index={index}
+                        color={'yellow'}
+                        score={scoreBoardField.score ?? 0}
+                        points={scoreBoardField.points}
+                        symbol={scoreBoardField.symbol}
+                        placeholder={scoreBoardField.placeholder}
+                        highlighted={scoreBoardField.highlighted}
                     />
                 );
             })}

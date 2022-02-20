@@ -3,17 +3,15 @@ import { CounterContext } from '../Hooks/useGameContext';
 import BlueField from './BlueField';
 import Dice from './Dice';
 import Extras from './Extras';
-import GreenField from './GreenField';
-import OrangeField from './OrangeField';
-import PurpleField from './PurpleField';
 import Turn from './Turn';
 import YellowField from './YellowField';
 import styled from 'styled-components';
 import { rgba } from 'polished';
 import { CleverColors } from '../values';
+import HorizontalField from './HorizontalField';
 
 const Board: FC = () => {
-    const { turn, rethrows, plusones, dices, scores, throwDices, chooseDice } = useContext(CounterContext);
+    const { turn, rethrows, plusones, dices, selectFieldMode, throwDices } = useContext(CounterContext);
 
     const unavailableDices = dices.filter(dice => !dice.available);
     const thrownDices = [...unavailableDices, ...Array(3 - unavailableDices.length).fill(null)];
@@ -52,21 +50,41 @@ const Board: FC = () => {
                 <Extras icon="+1" {...plusones} />
             </GridItem>
             <MiddleGrid>
-                <GridItem color={CleverColors.yellow} area="Yellow">
-                    <YellowField scores={scores.yellow} />
+                <GridItem
+                    color={CleverColors.yellow}
+                    area="Yellow"
+                    // dimmed={selectFieldMode && !highlightedFields.yellow.length}
+                >
+                    <YellowField />
                 </GridItem>
-                <GridItem color={CleverColors.blue} area="Blue">
-                    <BlueField scores={scores.blue} />
+                <GridItem
+                    color={CleverColors.blue}
+                    area="Blue"
+                    // dimmed={selectFieldMode && !highlightedFields.blue.length}
+                >
+                    <BlueField />
                 </GridItem>
             </MiddleGrid>
-            <GridItem color={CleverColors.green} area="Green">
-                <GreenField scores={scores.green} />
+            <GridItem
+                color={CleverColors.green}
+                area="Green"
+                // dimmed={selectFieldMode && !highlightedFields.green.length}
+            >
+                <HorizontalField color="green" />
             </GridItem>
-            <GridItem color={CleverColors.orange} area="Orange">
-                <OrangeField scores={scores.orange} />
+            <GridItem
+                color={CleverColors.orange}
+                area="Orange"
+                // dimmed={selectFieldMode && !highlightedFields.orange.length}
+            >
+                <HorizontalField color="orange" />
             </GridItem>
-            <GridItem color={CleverColors.purple} area="Purple">
-                <PurpleField scores={scores.purple} />
+            <GridItem
+                color={CleverColors.purple}
+                area="Purple"
+                // dimmed={selectFieldMode && !highlightedFields.purple.length}
+            >
+                <HorizontalField color="purple" />
             </GridItem>
         </StyledBoard>
     );
@@ -80,7 +98,6 @@ const StyledBoard = styled.div`
     border-radius: 10px;
     display: grid;
     grid-template-columns: 5em 5em 5em 5em 5em 5em 5em;
-    grid-template-rows: 5em 5em 5em 4em 4em 4em 5em 5em 5em;
     gap: 1em;
     grid-template-areas:
         'Dice1 Turn1 Turn2 Turn3 Turn4 Turn5 Turn6'
