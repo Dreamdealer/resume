@@ -43,7 +43,7 @@ const BlueField: FC = () => {
                     <ScoreField
                         key={index}
                         index={index}
-                        color={'yellow'}
+                        color={'blue'}
                         score={scoreBoardField.score ?? 0}
                         points={scoreBoardField.points}
                         symbol={scoreBoardField.symbol}

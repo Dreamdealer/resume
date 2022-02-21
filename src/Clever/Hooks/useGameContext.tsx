@@ -91,52 +91,85 @@ const CounterProvider: FC = ({ children }) => {
     const [scoreBoard, setScoreBoard] = useState<ScoreBoardType>({
         yellow: {
             1: {
-                score: null,
+                score: 3.1,
                 placeholder: '3.1',
                 validator: (score: number) => score == 3.1,
-                callback: () => {
-                    console.log('Yellow field 3.1 checked!');
-                    console.log('Check first vertical column in yellow grid!');
-                    console.log('Check first horizontal row in yellow grid!');
-                },
+                callback: () => checkYellowRowsAndColumns(1, 1),
             },
             2: {
-                score: null,
+                score: 6.1,
                 placeholder: '6.1',
                 validator: (score: number) => score == 6.1,
-                callback: () => {
-                    console.log('Yellow field 6.1 checked!');
-                    console.log('Check second vertical column in yellow grid!');
-                    console.log('Check first horizontal row in yellow grid!');
-                },
+                callback: () => checkYellowRowsAndColumns(1, 2),
             },
             3: {
                 score: null,
                 placeholder: '5.1',
                 validator: (score: number) => score == 5.1,
-                callback: () => {
-                    console.log('Yellow field 5.1 checked!');
-                    console.log('Check third vertical column in yellow grid!');
-                    console.log('Check first horizontal row in yellow grid!');
-                },
+                callback: () => checkYellowRowsAndColumns(1, 3),
             },
             4: { score: null, placeholder: 'X' },
-            6: { score: null, placeholder: '2.1', validator: (score: number) => score == 2.1 },
-            7: { score: null, placeholder: '1.1', validator: (score: number) => score == 1.1 },
+            6: {
+                score: 2.1,
+                placeholder: '2.1',
+                validator: (score: number) => score == 2.1,
+                callback: () => checkYellowRowsAndColumns(2, 1),
+            },
+            7: {
+                score: 1.1,
+                placeholder: '1.1',
+                validator: (score: number) => score == 1.1,
+                callback: () => checkYellowRowsAndColumns(2, 2),
+            },
             8: { score: null, placeholder: 'X' },
-            9: { score: null, placeholder: '5.2', validator: (score: number) => score == 5.2 },
-            11: { score: null, placeholder: '1.2', validator: (score: number) => score == 1.2 },
+            9: {
+                score: null,
+                placeholder: '5.2',
+                validator: (score: number) => score == 5.2,
+                callback: () => checkYellowRowsAndColumns(2, 3),
+            },
+            11: {
+                score: 1.2,
+                placeholder: '1.2',
+                validator: (score: number) => score == 1.2,
+                callback: () => checkYellowRowsAndColumns(3, 1),
+            },
             12: { score: null, placeholder: 'X' },
-            13: { score: null, placeholder: '2.2', validator: (score: number) => score == 2.2 },
-            14: { score: null, placeholder: '4.1', validator: (score: number) => score == 4.1 },
+            13: {
+                score: null,
+                placeholder: '2.2',
+                validator: (score: number) => score == 2.2,
+                callback: () => checkYellowRowsAndColumns(3, 3),
+            },
+            14: {
+                score: 4.1,
+                placeholder: '4.1',
+                validator: (score: number) => score == 4.1,
+                callback: () => checkYellowRowsAndColumns(3, 4),
+            },
             16: { score: null, placeholder: 'X' },
-            17: { score: null, placeholder: '3.2', validator: (score: number) => score == 3.2 },
-            18: { score: null, placeholder: '4.2', validator: (score: number) => score == 4.2 },
-            19: { score: null, placeholder: '6.2', validator: (score: number) => score == 6.2 },
+            17: {
+                score: null,
+                placeholder: '3.2',
+                validator: (score: number) => score == 3.2,
+                callback: () => checkYellowRowsAndColumns(4, 2),
+            },
+            18: {
+                score: 4.2,
+                placeholder: '4.2',
+                validator: (score: number) => score == 4.2,
+                callback: () => checkYellowRowsAndColumns(4, 3),
+            },
+            19: {
+                score: 6.2,
+                placeholder: '6.2',
+                validator: (score: number) => score == 6.2,
+                callback: () => checkYellowRowsAndColumns(4, 4),
+            },
         },
         blue: {
             1: { score: null, placeholder: '2', validator: (score: number) => score == 2 },
-            2: { score: null, placeholder: '3', validator: (score: number) => score == 3 },
+            2: { score: 3, placeholder: '3', validator: (score: number) => score == 3 },
             3: { score: null, placeholder: '4', validator: (score: number) => score == 4 },
             5: { score: null, placeholder: '5', validator: (score: number) => score == 5 },
             6: { score: null, placeholder: '6', validator: (score: number) => score == 6 },
@@ -149,19 +182,19 @@ const CounterProvider: FC = ({ children }) => {
         },
         green: {
             1: {
-                score: null,
+                score: 4,
                 points: 1,
                 placeholder: '≥1',
                 validator: (score: number, prevScore: number) => score >= 1 && prevScore !== null,
             },
             2: {
-                score: null,
+                score: 4,
                 points: 3,
                 placeholder: '≥2',
                 validator: (score: number, prevScore: number) => score >= 2 && prevScore !== null,
             },
             3: {
-                score: null,
+                score: 4,
                 points: 6,
                 placeholder: '≥3',
                 validator: (score: number, prevScore: number) => score >= 3 && prevScore !== null,
@@ -297,6 +330,32 @@ const CounterProvider: FC = ({ children }) => {
         setDices(scrambleDices(dices));
     };
 
+    const checkYellowRowsAndColumns = (rowNumber: number, columnNumber: number) => {
+        const yllw = scoreBoard.yellow;
+        switch (rowNumber) {
+            case 1:
+                if (yllw[1].score && yllw[2].score && yllw[2].score) {
+                    selectScoreField('blue', 999);
+                }
+                break;
+            case 2:
+                if (yllw[6].score && yllw[7].score && yllw[9].score) {
+                    addDiceScore('orange', 4);
+                }
+                break;
+            case 3:
+                if (yllw[11].score && yllw[13].score && yllw[14].score) {
+                    addDiceScore('green', 6);
+                }
+                break;
+            case 4:
+                if (yllw[17].score && yllw[18].score && yllw[19].score) {
+                    addFox();
+                }
+                break;
+        }
+    };
+
     const clickToSelectScore = (color: string, placeholder?: string) => {
         if (!selectFieldMode) return;
 
@@ -357,9 +416,6 @@ const CounterProvider: FC = ({ children }) => {
     };
 
     const setHighlightedFields = (color: string, score: number) => {
-        const blueScore = getBlueScore();
-        console.log('set highlighted fields ', color, 'for score: ', color === 'blue' ? blueScore : score);
-
         setScoreBoard(prevState => {
             const newState = { ...prevState };
 
@@ -378,7 +434,7 @@ const CounterProvider: FC = ({ children }) => {
                         }
                         break;
                     case 'blue':
-                        if (!field.score && field.validator(blueScore, prevScore)) {
+                        if (!field.score && (score === 999 || field.validator(getBlueScore(), prevScore))) {
                             field.highlighted = true;
                         }
                         break;
@@ -422,8 +478,12 @@ const CounterProvider: FC = ({ children }) => {
                 setHighlightedFields('orange', score);
                 setHighlightedFields('purple', score);
                 break;
+            case 'blue':
+                // selection of a random blue field can only occur at the beginning of turn 4 or from an extra move
+                // score 999 is used as a trigger for a random blue field
+                setHighlightedFields('blue', 999);
+                break;
             default:
-                // actually only yellow needs selection of score
                 setHighlightedFields(color, score);
                 break;
         }
@@ -478,6 +538,10 @@ const CounterProvider: FC = ({ children }) => {
         for (const [_, field] of Object.entries(newState[color])) {
             if (field.validator && field.validator(score)) {
                 field.score = score;
+
+                if (field.callback) {
+                    field.callback();
+                }
             }
         }
 
@@ -505,20 +569,6 @@ const CounterProvider: FC = ({ children }) => {
         }
 
         return newState;
-    };
-
-    const getLatestScoredField = (scores: ScoreBoardColorType) => {
-        let prevField = null;
-        let prevKey = null;
-
-        for (const [key, field] of Object.entries(scores)) {
-            if (field.score) {
-                prevField = field;
-                prevKey = key;
-            } else {
-                return { key: prevKey, field: prevField };
-            }
-        }
     };
 
     const getNumberOfSelectedDices = () => {
@@ -573,12 +623,23 @@ const CounterProvider: FC = ({ children }) => {
     };
 
     const recalculateTotalScores = () => {
-        for (const [color, _] of Object.entries(scoreBoard)) {
+        // orange and purple are simple; just sum up the scores
+        ['orange', 'purple'].map(color => {
             let counter = 0;
             for (const [_, field] of Object.entries(scoreBoard[color])) {
                 counter = counter + (field.score ?? 0);
             }
             setScoresPerColor(prevState => ({ ...prevState, [color]: counter }));
+        });
+        // green needs to return the last "points" key of the green fields
+        let prevField: ScoreBoardFieldType;
+        for (const [_, field] of Object.entries(scoreBoard.green)) {
+            if (!field.score) {
+                setScoresPerColor(prevState => ({ ...prevState, green: prevField.points ?? 0 }));
+                break;
+            }
+
+            prevField = field;
         }
     };
 
@@ -612,6 +673,10 @@ const CounterProvider: FC = ({ children }) => {
 const scrambleDices = (dices: ThrownDiceType[]) => {
     return dices.map(dice => {
         if (dice.available) {
+            // if (dice.dice.color === 'YELLOW') {
+            //     return { ...dice, amount: 3 };
+            // }
+
             return { ...dice, amount: Math.floor(Math.random() * 6) + 1 };
         }
 
