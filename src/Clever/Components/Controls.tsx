@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect } from 'react';
 import { CounterContext } from '../Hooks/useGameContext';
 import styled from 'styled-components';
+import { CleverColors } from '../values';
 
 const Controls: FC = () => {
     const { throwDices, turn, foxes, scoresPerColor, recalculateTotalScores, scoreBoard } = useContext(CounterContext);
@@ -14,11 +15,11 @@ const Controls: FC = () => {
             <b>Current Turn: {turn}</b>
             <b>Amount of foxes: {foxes}</b>
             <div className="scores">
-                <b>Yellow total: {scoresPerColor.yellow}</b>
-                <b>Blue total: {scoresPerColor.blue}</b>
-                <b>Green total: {scoresPerColor.green}</b>
-                <b>Orange total: {scoresPerColor.orange}</b>
-                <b>Purple total: {scoresPerColor.purple}</b>
+                <ScoreContainer color="yellow">{scoresPerColor.yellow}</ScoreContainer>
+                <ScoreContainer color="blue">{scoresPerColor.blue}</ScoreContainer>
+                <ScoreContainer color="green">{scoresPerColor.green}</ScoreContainer>
+                <ScoreContainer color="orange">{scoresPerColor.orange}</ScoreContainer>
+                <ScoreContainer color="purple">{scoresPerColor.purple}</ScoreContainer>
             </div>
             <button onClick={() => throwDices()}>Throw Dices</button>
         </StyledControls>
@@ -36,13 +37,22 @@ const StyledControls = styled.div`
     line-height: 1.3em;
 
     .scores {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 2em;
+        display: grid;
+        margin: 2em 0;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 1em;
     }
 
     > button {
         padding: 1em;
         margin-bottom: 1em;
     }
+`;
+
+const ScoreContainer = styled.div<{ color: string }>`
+    background-color: ${props => CleverColors[props.color]};
+    padding: 10px;
+    border-radius: 50%;
+    text-align: center;
+    color: #000;
 `;

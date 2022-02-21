@@ -20,6 +20,7 @@ export type ThrownDiceType = {
     dice: DiceType;
     amount: number;
     available?: boolean;
+    discarded?: boolean;
     turn: number;
 };
 

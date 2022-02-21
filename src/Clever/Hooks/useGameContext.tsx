@@ -287,7 +287,7 @@ const CounterProvider: FC = ({ children }) => {
             },
         },
         purple: {
-            1: { score: null, validator: purpleValidator },
+            1: { score: 6, validator: purpleValidator },
             2: { score: null, validator: purpleValidator },
             3: {
                 score: null,
@@ -609,22 +609,37 @@ const CounterProvider: FC = ({ children }) => {
                 break;
         }
 
+        // remove all dices that have a lower value than the one that was clicked
+        setDices(prevDices => {
+            const newDices = prevDices.map(dice => {
+                if (dice.amount < clickedDice.amount && dice !== clickedDice) {
+                    dice.discarded = true;
+                }
+
+                return dice;
+            });
+
+            console.log(newDices);
+
+            return newDices;
+        });
+
         // if this is the third selected dice, then end this round and start a new one
         if (getNumberOfSelectedDices() === 2) {
             // increase turn with one
             setTurn(turn + 1);
             // reset all selected dice
-            setDices(scrambleDices(dices.map(dice => ({ ...dice, available: true, turn: 0 }))));
+            setDices(scrambleDices(dices.map(dice => ({ ...dice, available: true, discarded: false, turn: 0 }))));
         } else {
             // set the selectedDice to unavailable and sort the unavailables to the turn they've been used so
             // they appear in the right order in the already-selected-dices list
-            setDices(
-                scrambleDices(
-                    dices
+            setDices(prevDices => {
+                return scrambleDices(
+                    prevDices
                         .map(dice => (clickedDice.dice === dice.dice ? { ...dice, available: false, turn } : dice))
                         .sort((a, b) => b.turn - a.turn),
-                ),
-            );
+                );
+            });
         }
     };
 
@@ -695,7 +710,8 @@ const CounterProvider: FC = ({ children }) => {
 
 const scrambleDices = (dices: ThrownDiceType[]) => {
     return dices.map(dice => {
-        if (dice.available) {
+        if (dice.available && !dice.discarded) {
+            // temp hack to make sure a certain dice had a specific value
             // if (dice.dice.color === 'YELLOW') {
             //     return { ...dice, amount: 3 };
             // }
@@ -717,7 +733,9 @@ const purpleValidator = (score: number, prevScore: number) => {
     // if prevScore is not set this is the first field and the score is always valid
     if (prevScore === undefined) return true;
 
-    return score === 6 || score > prevScore;
+    console.log(score, prevScore);
+
+    return prevScore === 6 || score > prevScore;
 };
 
 export { CounterContext, CounterProvider };
