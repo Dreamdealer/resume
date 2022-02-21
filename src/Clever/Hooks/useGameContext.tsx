@@ -8,7 +8,7 @@ import { PurpleScore } from '../Components/Extras/PurpleScore';
 import { Rethrow } from '../Components/Extras/Rethrow';
 import { YellowCross } from '../Components/Extras/YellowCross';
 import { ExtrasType, ThrownDiceType } from '../Types';
-import { startDices } from '../values';
+import { convertBlueScoresToPoints, startDices } from '../values';
 
 type ContextProps = {
     dices: ThrownDiceType[];
@@ -94,77 +94,77 @@ const CounterProvider: FC = ({ children }) => {
                 score: 3.1,
                 placeholder: '3.1',
                 validator: (score: number) => score == 3.1,
-                callback: () => checkYellowRowsAndColumns(1, 1),
+                callback: () => checkYellowBonusses(1, true),
             },
             2: {
                 score: 6.1,
                 placeholder: '6.1',
                 validator: (score: number) => score == 6.1,
-                callback: () => checkYellowRowsAndColumns(1, 2),
+                callback: () => checkYellowBonusses(1),
             },
             3: {
                 score: null,
                 placeholder: '5.1',
                 validator: (score: number) => score == 5.1,
-                callback: () => checkYellowRowsAndColumns(1, 3),
+                callback: () => checkYellowBonusses(1),
             },
             4: { score: null, placeholder: 'X' },
             6: {
                 score: 2.1,
                 placeholder: '2.1',
                 validator: (score: number) => score == 2.1,
-                callback: () => checkYellowRowsAndColumns(2, 1),
+                callback: () => checkYellowBonusses(2),
             },
             7: {
                 score: 1.1,
                 placeholder: '1.1',
                 validator: (score: number) => score == 1.1,
-                callback: () => checkYellowRowsAndColumns(2, 2),
+                callback: () => checkYellowBonusses(2, true),
             },
             8: { score: null, placeholder: 'X' },
             9: {
                 score: null,
                 placeholder: '5.2',
                 validator: (score: number) => score == 5.2,
-                callback: () => checkYellowRowsAndColumns(2, 3),
+                callback: () => checkYellowBonusses(2),
             },
             11: {
                 score: 1.2,
                 placeholder: '1.2',
                 validator: (score: number) => score == 1.2,
-                callback: () => checkYellowRowsAndColumns(3, 1),
+                callback: () => checkYellowBonusses(3),
             },
             12: { score: null, placeholder: 'X' },
             13: {
                 score: null,
                 placeholder: '2.2',
                 validator: (score: number) => score == 2.2,
-                callback: () => checkYellowRowsAndColumns(3, 3),
+                callback: () => checkYellowBonusses(3, true),
             },
             14: {
                 score: 4.1,
                 placeholder: '4.1',
                 validator: (score: number) => score == 4.1,
-                callback: () => checkYellowRowsAndColumns(3, 4),
+                callback: () => checkYellowBonusses(3),
             },
             16: { score: null, placeholder: 'X' },
             17: {
                 score: null,
                 placeholder: '3.2',
                 validator: (score: number) => score == 3.2,
-                callback: () => checkYellowRowsAndColumns(4, 2),
+                callback: () => checkYellowBonusses(4),
             },
             18: {
                 score: 4.2,
                 placeholder: '4.2',
                 validator: (score: number) => score == 4.2,
-                callback: () => checkYellowRowsAndColumns(4, 3),
+                callback: () => checkYellowBonusses(4),
             },
             19: {
                 score: 6.2,
                 placeholder: '6.2',
                 validator: (score: number) => score == 6.2,
-                callback: () => checkYellowRowsAndColumns(4, 4),
+                callback: () => checkYellowBonusses(4, true),
             },
         },
         blue: {
@@ -330,7 +330,7 @@ const CounterProvider: FC = ({ children }) => {
         setDices(scrambleDices(dices));
     };
 
-    const checkYellowRowsAndColumns = (rowNumber: number, columnNumber: number) => {
+    const checkYellowBonusses = (rowNumber: number, alsoDiagonal: boolean = false) => {
         const yllw = scoreBoard.yellow;
         switch (rowNumber) {
             case 1:
@@ -353,6 +353,12 @@ const CounterProvider: FC = ({ children }) => {
                     addFox();
                 }
                 break;
+        }
+
+        if (alsoDiagonal) {
+            if (yllw[1].score && yllw[7].score && yllw[13].score && yllw[19].score) {
+                addPlusOne();
+            }
         }
     };
 
@@ -623,6 +629,22 @@ const CounterProvider: FC = ({ children }) => {
     };
 
     const recalculateTotalScores = () => {
+        // for yellow we need to check which columns are full
+        const yllw = scoreBoard.yellow;
+        let yellowCounter = 0;
+        if (yllw[1].score && yllw[6].score && yllw[11].score) yellowCounter += 10;
+        if (yllw[2].score && yllw[7].score && yllw[17].score) yellowCounter += 14;
+        if (yllw[3].score && yllw[13].score && yllw[18].score) yellowCounter += 16;
+        if (yllw[9].score && yllw[14].score && yllw[19].score) yellowCounter += 20;
+        setScoresPerColor(prevState => ({ ...prevState, yellow: yellowCounter }));
+
+        // for blue count the number of scores and get the corresponding points
+        let blueCounter = 0;
+        for (const [_, field] of Object.entries(scoreBoard.blue)) {
+            if (field.score) blueCounter++;
+        }
+        setScoresPerColor(prevState => ({ ...prevState, blue: convertBlueScoresToPoints(blueCounter) }));
+
         // orange and purple are simple; just sum up the scores
         ['orange', 'purple'].map(color => {
             let counter = 0;
@@ -631,6 +653,7 @@ const CounterProvider: FC = ({ children }) => {
             }
             setScoresPerColor(prevState => ({ ...prevState, [color]: counter }));
         });
+
         // green needs to return the last "points" key of the green fields
         let prevField: ScoreBoardFieldType;
         for (const [_, field] of Object.entries(scoreBoard.green)) {
