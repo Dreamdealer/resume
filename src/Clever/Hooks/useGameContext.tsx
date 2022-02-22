@@ -8,7 +8,7 @@ import { PurpleScore } from '../Components/Extras/PurpleScore';
 import { Rethrow } from '../Components/Extras/Rethrow';
 import { YellowCross } from '../Components/Extras/YellowCross';
 import { ExtrasType, ThrownDiceType } from '../Types';
-import { convertBlueScoresToPoints, startDices } from '../values';
+import { convertBlueScoresToPoints, startDices } from '../valuesAndHelpers';
 
 type ContextProps = {
     dices: ThrownDiceType[];
@@ -618,9 +618,6 @@ const CounterProvider: FC = ({ children }) => {
 
                 return dice;
             });
-
-            console.log(newDices);
-
             return newDices;
         });
 
@@ -732,8 +729,6 @@ const purpleValidator = (score: number, prevScore: number) => {
     if (prevScore === null) return false;
     // if prevScore is not set this is the first field and the score is always valid
     if (prevScore === undefined) return true;
-
-    console.log(score, prevScore);
 
     return prevScore === 6 || score > prevScore;
 };

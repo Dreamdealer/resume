@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CleverColors } from '../../values';
+import { CleverColors } from '../../valuesAndHelpers';
 
 export const PurpleScore = styled.div<{ score: number }>`
     &:after {

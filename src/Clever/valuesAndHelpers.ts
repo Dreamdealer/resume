@@ -1,3 +1,4 @@
+import { ScoreBoardColorType } from "./Hooks/useGameContext";
 import { CleverColorsType, DicesType, ThrownDiceType } from "./Types";
 
 export const CleverColors: CleverColorsType = {
@@ -28,11 +29,12 @@ export const startDices: ThrownDiceType[] = [
     { dice: DICES.purple, amount: 1, available: true, turn: 0 },
 ];
 
-const addRethrow = () => {
-    console.log('add rethrow');
-}
-const changeLastScore = (score:number) => {
-    console.log('change last score');
+export const hasHighlightedScorefields = (scorefields: ScoreBoardColorType) => {
+    for (const [_, field] of Object.entries(scorefields)) {
+        if (field.highlighted) return true;
+    }
+
+    return false;
 }
 
 export const convertBlueScoresToPoints = (score: number):number => {

@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from 'react';
 import { CounterContext } from '../Hooks/useGameContext';
 import styled from 'styled-components';
-import { CleverColors } from '../values';
+import { CleverColors } from '../valuesAndHelpers';
 
 const Controls: FC = () => {
     const { throwDices, turn, foxes, scoresPerColor, recalculateTotalScores, scoreBoard } = useContext(CounterContext);

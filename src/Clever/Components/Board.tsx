@@ -7,11 +7,11 @@ import Turn from './Turn';
 import YellowField from './YellowField';
 import styled from 'styled-components';
 import { rgba } from 'polished';
-import { CleverColors } from '../values';
+import { CleverColors, hasHighlightedScorefields } from '../valuesAndHelpers';
 import HorizontalField from './HorizontalField';
 
 const Board: FC = () => {
-    const { turn, rethrows, plusones, dices, selectFieldMode, throwDices } = useContext(CounterContext);
+    const { turn, rethrows, plusones, dices, selectFieldMode, scoreBoard, throwDices } = useContext(CounterContext);
 
     const unavailableDices = dices.filter(dice => !dice.available);
     const thrownDices = [...unavailableDices, ...Array(3 - unavailableDices.length).fill(null)];
@@ -53,14 +53,14 @@ const Board: FC = () => {
                 <GridItem
                     color={CleverColors.yellow}
                     area="Yellow"
-                    // dimmed={selectFieldMode && !highlightedFields.yellow.length}
+                    dimmed={selectFieldMode && !hasHighlightedScorefields(scoreBoard.yellow)}
                 >
                     <YellowField />
                 </GridItem>
                 <GridItem
                     color={CleverColors.blue}
                     area="Blue"
-                    // dimmed={selectFieldMode && !highlightedFields.blue.length}
+                    dimmed={selectFieldMode && !hasHighlightedScorefields(scoreBoard.blue)}
                 >
                     <BlueField />
                 </GridItem>
@@ -68,21 +68,21 @@ const Board: FC = () => {
             <GridItem
                 color={CleverColors.green}
                 area="Green"
-                // dimmed={selectFieldMode && !highlightedFields.green.length}
+                dimmed={selectFieldMode && !hasHighlightedScorefields(scoreBoard.green)}
             >
                 <HorizontalField color="green" />
             </GridItem>
             <GridItem
                 color={CleverColors.orange}
                 area="Orange"
-                // dimmed={selectFieldMode && !highlightedFields.orange.length}
+                dimmed={selectFieldMode && !hasHighlightedScorefields(scoreBoard.orange)}
             >
                 <HorizontalField color="orange" />
             </GridItem>
             <GridItem
                 color={CleverColors.purple}
                 area="Purple"
-                // dimmed={selectFieldMode && !highlightedFields.purple.length}
+                dimmed={selectFieldMode && !hasHighlightedScorefields(scoreBoard.purple)}
             >
                 <HorizontalField color="purple" />
             </GridItem>

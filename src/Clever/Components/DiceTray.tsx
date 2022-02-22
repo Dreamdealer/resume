@@ -29,13 +29,7 @@ const DiceTray: FC = () => {
                     {dices
                         .filter(dice => dice.discarded)
                         .map((thrownDice, index) => (
-                            <Dice
-                                key={index}
-                                thrownDice={thrownDice}
-                                onClick={() => {
-                                    chooseDice(thrownDice);
-                                }}
-                            />
+                            <Dice key={index} thrownDice={thrownDice} />
                         ))}
                 </StyledDiceContainer>
             </StyledSilverTray>

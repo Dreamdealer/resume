@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ThrownDiceType } from '../Types';
-import { CleverColors } from '../values';
+import { CleverColors } from '../valuesAndHelpers';
 
 type PropsType = {
     thrownDice: ThrownDiceType;
