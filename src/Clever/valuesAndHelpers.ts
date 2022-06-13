@@ -37,6 +37,20 @@ export const hasHighlightedScorefields = (scorefields: ScoreBoardColorType) => {
     return false;
 }
 
+export const getDicesLeftInTray = (dices: ThrownDiceType[]): number => {
+    return dices.filter(dice => dice.available && !dice.discarded).length;
+}
+
+export const getNumberOfSelectedDices = (dices: ThrownDiceType[]): number => {
+    return dices.filter(dice => !dice.available).length;
+};
+
+export const resetDices = (dices: ThrownDiceType[]): ThrownDiceType[] => {
+    return dices.map(dice => {
+        return { ...dice, available: true, discarded: false, turn: 0 }
+    });
+}
+
 export const convertBlueScoresToPoints = (score: number):number => {
     switch (score) {
         case 1: return 1;

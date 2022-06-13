@@ -11,10 +11,8 @@ const Navigation = () => (
         </StyledLink>
         <StyledLink to="/clever">
             <strong>Clever</strong>
-            <p>
-                This project uses: React, Custom hooks, Typescript, Styled Components, Theming &amp;
-                LocalStorage
-            </p>
+            <i>Very much work in progress!!</i>
+            <p>This project uses: React, Custom hooks, Typescript, Styled Components, Theming &amp; LocalStorage</p>
         </StyledLink>
     </StyledNav>
 );

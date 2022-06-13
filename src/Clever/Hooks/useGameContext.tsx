@@ -7,8 +7,14 @@ import { PlusOne } from '../Components/Extras/PlusOne';
 import { PurpleScore } from '../Components/Extras/PurpleScore';
 import { Rethrow } from '../Components/Extras/Rethrow';
 import { YellowCross } from '../Components/Extras/YellowCross';
-import { ExtrasType, ThrownDiceType } from '../Types';
-import { convertBlueScoresToPoints, startDices } from '../valuesAndHelpers';
+import { DicesType, DiceType, ExtrasType, ThrownDiceType } from '../Types';
+import {
+    convertBlueScoresToPoints,
+    getDicesLeftInTray,
+    getNumberOfSelectedDices,
+    resetDices,
+    startDices,
+} from '../valuesAndHelpers';
 
 type ContextProps = {
     dices: ThrownDiceType[];
@@ -577,15 +583,18 @@ const CounterProvider: FC = ({ children }) => {
         return newState;
     };
 
-    const getNumberOfSelectedDices = () => {
-        return dices.filter(dice => !dice.available).length;
-    };
-
+    /**
+     * Main function to handle the clicked dice (three times each turn)
+     *
+     * @param clickedDice
+     * @returns
+     */
     const chooseDice = (clickedDice: ThrownDiceType) => {
         // make sure there's not more than three dices selected
-        if (getNumberOfSelectedDices() >= 3) {
-            return;
-        }
+        if (getNumberOfSelectedDices(dices) >= 3) return;
+
+        // if there's a turn active, then return, since we want the user to finish the previous turn first
+        if (selectFieldMode) return;
 
         // add selected dice score to the scoreboard
         switch (clickedDice.dice.color) {
@@ -621,20 +630,25 @@ const CounterProvider: FC = ({ children }) => {
             return newDices;
         });
 
+        endTurn(clickedDice);
+    };
+
+    const endTurn = (clickedDice: ThrownDiceType) => {
+        console.log('End turn... scrambling or resetting the dices');
         // if this is the third selected dice, then end this round and start a new one
-        if (getNumberOfSelectedDices() === 2) {
+        if (getNumberOfSelectedDices(dices) === 2 || getDicesLeftInTray(dices) === 1) {
             // increase turn with one
             setTurn(turn + 1);
-            // reset all selected dice
-            setDices(scrambleDices(dices.map(dice => ({ ...dice, available: true, discarded: false, turn: 0 }))));
+            // scrable and reset all selected dice
+            setDices(scrambleDices(resetDices(dices)));
         } else {
             // set the selectedDice to unavailable and sort the unavailables to the turn they've been used so
             // they appear in the right order in the already-selected-dices list
             setDices(prevDices => {
                 return scrambleDices(
                     prevDices
-                        .map(dice => (clickedDice.dice === dice.dice ? { ...dice, available: false, turn } : dice))
-                        .sort((a, b) => b.turn - a.turn),
+                        .map(dice => (clickedDice.dice === dice.dice ? { ...dice, available: false, turn } : dice)) // set the clicked dice to unavailable
+                        .sort((a, b) => b.turn - a.turn), // sort the dices by the turn they've been used
                 );
             });
         }
