@@ -5,7 +5,6 @@ export const useGameStatus = (rowsCleared: number) => {
     const [rows, setRows] = useState(0);
     const [level, setLevel] = useState(0);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const linePoints = [40, 100, 300, 1200];
 
     const calcScore = useCallback(() => {

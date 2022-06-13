@@ -1,23 +1,19 @@
 import { FC } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import BreakoutContainer from '../Breakout/BreakoutContainer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Tetris from '../Tetris/Tetris';
+import Clever from '../Clever/Clever';
+import Sweden from '../Sweden/';
 import Home from './Home';
 
 const Homepage: FC = () => {
     return (
         <Router>
-            <Switch>
-                <Route path="/breakout">
-                    <BreakoutContainer />
-                </Route>
-                <Route path="/tetris">
-                    <Tetris />
-                </Route>
-                <Route path="/">
-                    <Home />
-                </Route>
-            </Switch>
+            <Routes>
+                <Route path="/tetris" element={<Tetris />} />
+                <Route path="/clever" element={<Clever />} />
+                <Route path="/sweden" element={<Sweden />} />
+                <Route path="/" element={<Home />} />
+            </Routes>
         </Router>
     );
 };

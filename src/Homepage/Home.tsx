@@ -48,7 +48,7 @@ const Home = () => {
                 <a href="https://www.baddecision.works">a webshop</a> for custom Volvo parts in 2019.
             </p>
             <p>
-                This website is <a href="https://github.com/Dreamdealer/resume">open source</a>. It's a static page,
+                This website is <a href="https://github.com/Dreamdealer/resume">open source</a>. It&apos;s a static page,
                 built in react and hosted on Github Pages.
             </p>
             <StyledButton

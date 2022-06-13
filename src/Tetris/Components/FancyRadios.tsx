@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 const StyledFancyRadiosContainer = styled.div`
@@ -33,8 +33,8 @@ type PropsType = {
 
 const FancyRadios: FC<PropsType> = props => (
     <StyledFancyRadiosContainer>
-        {props.options.map(option => (
-            <StyledLabel checked={props.selected === option.value}>
+        {props.options.map((option, index) => (
+            <StyledLabel key={index} checked={props.selected === option.value}>
                 <input
                     type="radio"
                     name={props.name}
