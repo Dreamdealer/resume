@@ -11,6 +11,16 @@ const Sweden: FC = () => {
                 meest conventionele manieren is om met de auto of met het vliegtuig te komen. Lopen en zwemmen kan vast
                 ook, maar daar kunnen wij weinig advies over geven :-)
             </p>
+            <h2>Ons adres</h2>
+            <p>
+                Wij wonen voorlopig in het mooie dorpje Blixterboda. Ons adres is:
+                <br />
+                Johan en Monique
+                <br />
+                Västertorp 420
+                <br />
+                718 92 Frövi
+            </p>
             <h2>Met de auto</h2>
             <p>
                 Met de auto is het best een eind rijden (14-16 uur als je in één keer doorrijdt) maar schijn bedriegt,
@@ -67,7 +77,7 @@ const Sweden: FC = () => {
                 Zweden en ongeveer 2 uur rijden van ons huis. Er gaat een snelle trein die je zo naar het centrum van
                 Stockholm brengt. Van daar uit kun je met de trein (bij voorkeur de Malartåg, die gaat hard en is
                 comfortabel) <ShortLink linkId="train-to-arboga">naar Arboga</ShortLink>
-                (20 min naar Blixterboda) of <ShortLink linkId="train-to-orebro">naar Örbero</ShortLink> (40 minuten
+                (20 min naar Blixterboda) of <ShortLink linkId="train-to-orebro">naar Örebro</ShortLink> (40 minuten
                 naar Blixterboda).
             </p>
             <p>
