@@ -21,6 +21,17 @@ const Sweden: FC = () => {
                 <br />
                 718 92 Frövi
             </p>
+            <h2>Verblijven in Zweden</h2>
+            <p>
+                Zo lang we in Blixterboda wonen hebben we helaas niet de gelegenheid om gasten in ons eigen huis onder
+                te brengen. Uiteindelijk willen we graag een huis kopen waar een gastenverblijf bij is, maar tot die
+                tijd moeten we het hier even mee doen. Op het terrein waar wij wonen is een vakantiehuisje. Kijk op{' '}
+                <ShortLink linkId="vastertorp">de website rechtsonderin</ShortLink> voor beschikbaarheid. Een andere
+                oplossing dichtbij is lastiger, omdat we in de middle-of-nowhere wonen.{' '}
+                <ShortLink linkId="airbnb">Op AirBnB</ShortLink> is wel wat te vinden. Volgens booking.com is er{' '}
+                <ShortLink linkId="hotel-lindesberg">één hotel in Lindesberg</ShortLink> (20 minuten rijden). In de
+                grote stad (Örebro) zijn er wel wat meer, maar dat is meteen 40-50 minuten rijden van ons.
+            </p>
             <h2>Met de auto</h2>
             <p>
                 Met de auto is het best een eind rijden (14-16 uur als je in één keer doorrijdt) maar schijn bedriegt,
@@ -86,9 +97,23 @@ const Sweden: FC = () => {
                 Blixterboda.
             </p>
             <p>
-                Je kan vanuit <ShortLink linkId="flights-to-arlanda">verschillende vliegvelden</ShortLink>
-                naar Arlanda vliegen, maar wij vinden zelf <ShortLink linkId="dusseldorf">Dusseldorf</ShortLink> het
-                prettigste. Vooral omdat Schiphol zo vervelend is.
+                Je kan vanuit <ShortLink linkId="flights-to-arlanda">verschillende vliegvelden</ShortLink> naar Arlanda
+                vliegen, maar wij vinden zelf <ShortLink linkId="dusseldorf">Dusseldorf</ShortLink> het prettigste.
+                Vooral omdat Schiphol zo vervelend is.
+            </p>
+            <h2>Met de flixbus</h2>
+            <p>
+                Hier hebben wij zelf nog niet mee gereisd, maar het is een optie: met die groene flixbus. Dat zijn
+                internationale busreizen. Niet super comfortabel, maar wel goedoop. Als ik nu check zie ik een
+                buskaartje <ShortLink linkId="flixbus">van Amsterdam naar Stockholm</ShortLink> voor ongeveer 120 euro.
+            </p>
+            <h2>Met de trein</h2>
+            <p>
+                Ook hier hebben wij zelf nog geen ervaring mee, maar je kan ook internationaal met de trein. Ik heb even
+                gevogeld op de website van NS Internationaal en blijkbaar rijdt de trein vanuit Arnhem door Duitsland en
+                Denemarken naar Zweden. <ShortLink linkId="trein-arnhem-stockholm">Van Arnhem naar Stockholm</ShortLink>{' '}
+                in 20 uur en 39 minuten. Da&apos;s best lang maar je kan dan wel lekker uit het raam kijken en
+                kruiswoordpuzzels maken.
             </p>
         </StyledPageContainer>
     );
@@ -133,6 +158,16 @@ const ShortLink: FC<{ linkId: string }> = props => {
                 return `https://www.sj.se/en/kop-resa/valj-resa/Stockholm%20Central/Arboga/${sjTodayString}`;
             case 'arlanda-to-blixterboda':
                 return 'https://goo.gl/maps/5cyhx7xbkZmksdrNA';
+            case 'trein-arnhem-stockholm':
+                return 'https://www.nsinternational.com/nl/treintickets-v3/#/search/NLAHM/SESTO';
+            case 'flixbus':
+                return 'https://shop.flixbus.nl/search?departureCity=40dde3b8-8646-11e6-9066-549f350fcb0c&arrivalCity=40dfdbe7-8646-11e6-9066-549f350fcb0c&route=Amsterdam-Stockholm';
+            case 'airbnb':
+                return 'https://www.airbnb.nl/s/Blixterboda--Zweden/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&date_picker_type=flexible_dates&query=718%2092%20Blixterboda%2C%20Zweden&place_id=ChIJCd_qvP45XEYRACW3c-nO9wc&source=structured_search_input_header&search_type=user_map_move&ne_lat=59.579847552665164&ne_lng=15.620928351877467&sw_lat=59.43350722850365&sw_lng=15.22233063459231&zoom=12&search_by_map=true&flexible_trip_lengths%5B%5D=weekend_trip';
+            case 'vastertorp':
+                return 'https://www.vastertorp.nl';
+            case 'hotel-lindesberg':
+                return 'https://www.booking.com/hotel/se/lindesbergs-stadshotell.nl.html';
             default:
                 return 'missing link for {linkId}';
         }
